@@ -55,7 +55,7 @@ tar xzf dedcom-<version>-<triple>.tar.gz
 sudo install -m 755 dedcom /usr/local/bin/dedcom
 ```
 
-Hoặc cài bằng Cargo: `cargo install dedupcommando` (tệp nhị phân là `dedcom`). Việc dựng từ mã nguồn dùng Docker, không cần toolchain Rust cục bộ.
+Việc dựng từ mã nguồn dùng Docker, không cần toolchain Rust cục bộ.
 
 - [Bản phát hành mới nhất](https://github.com/dedupcommando/DedupCommando/releases) · [Mã nguồn trên GitHub](https://github.com/dedupcommando/DedupCommando)
 - Chi tiết hơn (bằng tiếng Anh): [trùng lặp trên ZFS](@/en/zfs-file-deduplication/_index.md) · [trên Proxmox VE](@/en/proxmox-ve-duplicate-files/_index.md) · [công cụ tìm tệp trùng lặp trên Linux](@/en/linux-duplicate-file-finder/_index.md) · [hardlink vs reflink](@/en/hardlink-vs-reflink/_index.md) · [an toàn và khôi phục](@/en/safety-and-recovery/_index.md) · [tài liệu](@/en/docs/_index.md)

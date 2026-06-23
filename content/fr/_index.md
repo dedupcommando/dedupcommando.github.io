@@ -55,7 +55,7 @@ tar xzf dedcom-<version>-<triple>.tar.gz
 sudo install -m 755 dedcom /usr/local/bin/dedcom
 ```
 
-Ou installez avec Cargo : `cargo install dedupcommando` (le binaire est `dedcom`). La compilation depuis les sources se fait avec Docker, sans toolchain Rust local.
+La compilation depuis les sources se fait avec Docker, sans toolchain Rust local.
 
 - [Dernière version](https://github.com/dedupcommando/DedupCommando/releases) · [Code sur GitHub](https://github.com/dedupcommando/DedupCommando)
 - Plus de détails (en anglais) : [doublons sur ZFS](@/en/zfs-file-deduplication/_index.md) · [sur Proxmox VE](@/en/proxmox-ve-duplicate-files/_index.md) · [le détecteur Linux de doublons](@/en/linux-duplicate-file-finder/_index.md) · [hardlink vs reflink](@/en/hardlink-vs-reflink/_index.md) · [sécurité et récupération](@/en/safety-and-recovery/_index.md) · [documentation](@/en/docs/_index.md)

@@ -17,8 +17,9 @@ All documentation is in English. The project lives on [GitHub](https://github.co
    tar xzf dedcom-<version>-<triple>.tar.gz
    sudo install -m 755 dedcom /usr/local/bin/dedcom
    ```
-2. **Cargo** — `cargo install dedupcommando` (the binary is `dedcom`; Linux only).
-3. **From source** — a Docker-based build, no local Rust toolchain required (see CONTRIBUTING).
+2. **From source** — a Docker-based build, no local Rust toolchain required (see CONTRIBUTING).
+
+Cargo (`cargo install dedcom`) and APT (`sudo apt install dedcom`) are **planned — not yet available**; for now use the release binary or build from source.
 
 ## First scan
 
