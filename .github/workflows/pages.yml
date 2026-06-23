@@ -1,0 +1,50 @@
+# Build the landing site with Zola and deploy to GitHub Pages.
+# Lives in the public landing repo (dedupcommando.github.io); not used by the code repo.
+name: Deploy landing (GitHub Pages)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install Zola
+        run: |
+          ver=0.19.2
+          url="https://github.com/getzola/zola/releases/download/v${ver}/zola-v${ver}-x86_64-unknown-linux-gnu.tar.gz"
+          curl -fsSL "$url" | tar xz
+          sudo install -m 0755 zola /usr/local/bin/zola
+      - name: Build
+        run: zola build
+      - name: Landing checks
+        run: sh check.sh --no-build
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: public
+
+  deploy:
+    needs: build
+    # On a PRIVATE repo only `build` runs (it verifies the site compiles + uploads the
+    # artifact). The live deploy runs only when the repo is PUBLIC — i.e. after the public
+    # flip (Ф17). On a private repo (16B) this job is skipped, not failed.
+    if: ${{ github.event.repository.visibility == 'public' }}
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+{# Custom sitemap: canonical, indexable URLs only — drop the non-canonical root /
+   (it consolidates to /en/ via rel=canonical). The sitemap template context has no
+   `config`, so base_url is hardcoded below; update this literal on a domain move. #}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{%- for entry in entries %}
+{%- if entry.permalink != "https://dedupcommando.github.io/" %}
+  <url><loc>{{ entry.permalink | safe }}</loc></url>
+{%- endif %}
+{%- endfor %}
+</urlset>

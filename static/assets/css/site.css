@@ -1,0 +1,96 @@
+/* DedupCommando landing — CSS foundation.
+   System fonts only; no external CDN, no web fonts, no trackers.
+   RTL is handled via CSS logical properties (margin-inline, padding-inline, border-block-*). */
+
+:root {
+  --bg: #0f1115;
+  --fg: #e6e8eb;
+  --muted: #9aa3ad;
+  --accent: #4aa3ff;
+  --rule: rgba(127, 127, 127, 0.25);
+  --maxw: 56rem;
+  --pad: 1.25rem;
+}
+@media (prefers-color-scheme: light) {
+  :root { --bg: #ffffff; --fg: #1a1d21; --muted: #5a636d; --accent: #0b62c4; }
+}
+
+* { box-sizing: border-box; }
+html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "Noto Sans Arabic", Arial, sans-serif;
+  line-height: 1.6;
+}
+a { color: var(--accent); }
+
+.skip-link {
+  position: absolute;
+  inset-inline-start: -9999px;
+}
+.skip-link:focus {
+  inset-inline-start: var(--pad);
+  inset-block-start: var(--pad);
+  background: var(--accent);
+  color: #fff;
+  padding: .4rem .6rem;
+  border-radius: .25rem;
+}
+
+.site-header,
+.enonly-note,
+.content,
+.site-footer {
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--pad);
+}
+
+.site-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem 1rem;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: 1rem;
+  border-block-end: 1px solid var(--rule);
+}
+.brand {
+  font-weight: 700;
+  font-size: 1.15rem;
+  text-decoration: none;
+  color: var(--fg);
+}
+
+.lang-switcher {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem .75rem;
+  font-size: .9rem;
+}
+.lang-switcher a { text-decoration: none; }
+.lang-switcher a[aria-current="page"] { font-weight: 700; text-decoration: underline; }
+
+.enonly-note {
+  padding-block: .5rem;
+  color: var(--muted);
+  font-size: .85rem;
+}
+
+.content {
+  padding-block: 2rem;
+  min-height: 50vh;
+  text-align: start;
+}
+h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); line-height: 1.2; }
+
+.site-footer {
+  padding-block: 1.5rem;
+  border-block-start: 1px solid var(--rule);
+  color: var(--muted);
+  font-size: .85rem;
+}
+.site-footer a { color: var(--accent); }
+.trademarks { margin-block-start: .5rem; }

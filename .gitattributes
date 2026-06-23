@@ -1,0 +1,3 @@
+# Landing site source ships with LF line endings (Linux / GitHub Pages).
+* text=auto eol=lf
+*.png binary

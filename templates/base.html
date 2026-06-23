@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+{%- set cur = section.extra.lang | default(value="en") -%}
+{%- set depth = section.components | length -%}
+{%- if section.extra.canonical -%}{%- set canonical = get_url(path=section.extra.canonical) -%}{%- else -%}{%- set canonical = section.permalink -%}{%- endif -%}
+{%- set_global og_locale = "en_US" -%}
+{%- for loc in config.extra.locales -%}{%- if loc.hreflang == cur -%}{%- set_global og_locale = loc.og_locale -%}{%- endif -%}{%- endfor -%}
+<html lang="{{ cur }}" dir="{{ section.extra.dir | default(value='ltr') }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ section.title | default(value=config.title) }}</title>
+  <meta name="description" content="{{ section.description | default(value=config.description) }}">
+  <link rel="canonical" href="{{ canonical | safe }}">
+
+  {# hreflang: the home cluster (root + locale homes, depth <= 1) lists every locale + x-default -> /en/;
+     EN-first intent pages self-reference until they are localized. #}
+  {%- if depth <= 1 %}
+  {%- for loc in config.extra.locales %}
+  <link rel="alternate" hreflang="{{ loc.hreflang }}" href="{{ get_url(path='@/' ~ loc.slug ~ '/_index.md') | safe }}">
+  {%- endfor %}
+  <link rel="alternate" hreflang="x-default" href="{{ get_url(path='@/en/_index.md') | safe }}">
+  {%- else %}
+  <link rel="alternate" hreflang="en" href="{{ canonical | safe }}">
+  <link rel="alternate" hreflang="x-default" href="{{ canonical | safe }}">
+  {%- endif %}
+
+  <meta property="og:type" content="{% if depth >= 2 %}article{% else %}website{% endif %}">
+  <meta property="og:site_name" content="DedupCommando">
+  <meta property="og:title" content="{{ section.title | default(value=config.title) }}">
+  <meta property="og:description" content="{{ section.description | default(value=config.description) }}">
+  <meta property="og:url" content="{{ canonical | safe }}">
+  <meta property="og:image" content="{{ get_url(path='assets/og/og-default.png') | safe }}">
+  <meta property="og:locale" content="{{ og_locale }}">
+  {%- if depth <= 1 %}{%- for loc in config.extra.locales %}{%- if loc.hreflang != cur %}
+  <meta property="og:locale:alternate" content="{{ loc.og_locale }}">
+  {%- endif %}{%- endfor %}{%- endif %}
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ section.title | default(value=config.title) }}">
+  <meta name="twitter:description" content="{{ section.description | default(value=config.description) }}">
+  <meta name="twitter:image" content="{{ get_url(path='assets/og/og-default.png') | safe }}">
+
+  {%- if depth <= 1 and cur == "en" %}
+  <script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"DedupCommando","applicationCategory":"UtilitiesApplication","operatingSystem":"Linux","softwareVersion":"{{ config.extra.version }}","url":"{{ get_url(path='@/en/_index.md') | safe }}","downloadUrl":"{{ config.extra.repo_url | safe }}/releases","releaseNotes":"{{ config.extra.repo_url | safe }}/releases","license":"https://www.apache.org/licenses/LICENSE-2.0","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Person","name":"Denis \"DeQuzzy\" Kuznetsov"},"publisher":{"@type":"Organization","name":"DedupCommando","url":"https://github.com/dedupcommando"}}
+  </script>
+  <script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareSourceCode","name":"DedupCommando","codeRepository":"{{ config.extra.repo_url | safe }}","programmingLanguage":"Rust","runtimePlatform":"Linux","license":"https://www.apache.org/licenses/LICENSE-2.0","author":{"@type":"Person","name":"Denis \"DeQuzzy\" Kuznetsov"}}
+  </script>
+  {%- endif %}
+
+  <link rel="stylesheet" href="{{ get_url(path='assets/css/site.css') | safe }}">
+  {% block head_extra %}{% endblock %}
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="{{ get_url(path='/') | safe }}">DedupCommando</a>
+    <nav class="lang-switcher" aria-label="Language">
+      {% for loc in config.extra.locales %}
+        <a href="{{ get_url(path='@/' ~ loc.slug ~ '/_index.md') | safe }}"
+           hreflang="{{ loc.hreflang }}" lang="{{ loc.hreflang }}"
+           {% if loc.hreflang == cur %}aria-current="page"{% endif %}>{{ loc.name }}</a>
+      {% endfor %}
+    </nav>
+  </header>
+
+  <p class="enonly-note">The CLI and technical documentation are currently available in English only.</p>
+
+  <main class="content" id="main">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <p>DedupCommando — v{{ config.extra.version }} (beta) · Apache-2.0 ·
+       <a href="{{ config.extra.repo_url | safe }}">Source on GitHub</a></p>
+    <p class="trademarks">
+      Proxmox® is a registered trademark of Proxmox Server Solutions GmbH. DedupCommando is an independent
+      project and is not affiliated with or endorsed by Proxmox Server Solutions GmbH. ZFS and OpenZFS are
+      trademarks of their respective owners; “Commando” and Commando VM are unrelated projects.
+    </p>
+  </footer>
+</body>
+</html>
