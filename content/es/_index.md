@@ -51,18 +51,19 @@ DedupCommando está diseñado para ZFS: las instantáneas, los límites por data
 **Debian 13 / Proxmox VE 9+** — instala desde el repositorio APT firmado (se actualiza con `apt upgrade`):
 
 ```sh
-sudo curl -fsSL https://dedupcommando.github.io/apt/dedcom-archive-keyring.gpg \
+# as root (Proxmox default); on non-root Debian run: sudo -i
+curl -fsSL https://dedupcommando.github.io/apt/dedcom-archive-keyring.gpg \
   -o /usr/share/keyrings/dedcom-archive-keyring.gpg
 echo "deb [signed-by=/usr/share/keyrings/dedcom-archive-keyring.gpg] https://dedupcommando.github.io/apt stable main" \
-  | sudo tee /etc/apt/sources.list.d/dedcom.list
-sudo apt update && sudo apt install dedcom
+  | tee /etc/apt/sources.list.d/dedcom.list
+apt update && apt install dedcom
 ```
 
 Hay binarios precompilados en cada publicación de GitHub (amd64 y arm64) — descarga, **verifica** e instala:
 
 ```sh
 tar xzf dedcom-<version>-<triple>.tar.gz
-sudo install -m 755 dedcom /usr/local/bin/dedcom
+install -m 755 dedcom /usr/local/bin/dedcom
 ```
 
 La compilación desde el código fuente se hace con Docker, sin necesidad de un toolchain de Rust local.

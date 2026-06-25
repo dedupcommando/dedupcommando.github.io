@@ -51,18 +51,19 @@ DedupCommando được thiết kế cho ZFS: ảnh chụp, ranh giới dataset v
 **Debian 13 / Proxmox VE 9+** — cài đặt từ kho APT đã ký (tự cập nhật qua `apt upgrade`):
 
 ```sh
-sudo curl -fsSL https://dedupcommando.github.io/apt/dedcom-archive-keyring.gpg \
+# as root (Proxmox default); on non-root Debian run: sudo -i
+curl -fsSL https://dedupcommando.github.io/apt/dedcom-archive-keyring.gpg \
   -o /usr/share/keyrings/dedcom-archive-keyring.gpg
 echo "deb [signed-by=/usr/share/keyrings/dedcom-archive-keyring.gpg] https://dedupcommando.github.io/apt stable main" \
-  | sudo tee /etc/apt/sources.list.d/dedcom.list
-sudo apt update && sudo apt install dedcom
+  | tee /etc/apt/sources.list.d/dedcom.list
+apt update && apt install dedcom
 ```
 
 Các bản dựng sẵn được đính kèm mỗi bản phát hành GitHub (amd64 và arm64) — tải về, **xác minh**, rồi cài đặt:
 
 ```sh
 tar xzf dedcom-<version>-<triple>.tar.gz
-sudo install -m 755 dedcom /usr/local/bin/dedcom
+install -m 755 dedcom /usr/local/bin/dedcom
 ```
 
 Việc dựng từ mã nguồn dùng Docker, không cần toolchain Rust cục bộ.

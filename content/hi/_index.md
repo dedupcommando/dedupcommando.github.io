@@ -51,18 +51,19 @@ DedupCommando को ZFS के लिए डिज़ाइन किया ग
 **Debian 13 / Proxmox VE 9+** — हस्ताक्षरित APT रिपॉज़िटरी से इंस्टॉल करें (`apt upgrade` से अपडेट):
 
 ```sh
-sudo curl -fsSL https://dedupcommando.github.io/apt/dedcom-archive-keyring.gpg \
+# as root (Proxmox default); on non-root Debian run: sudo -i
+curl -fsSL https://dedupcommando.github.io/apt/dedcom-archive-keyring.gpg \
   -o /usr/share/keyrings/dedcom-archive-keyring.gpg
 echo "deb [signed-by=/usr/share/keyrings/dedcom-archive-keyring.gpg] https://dedupcommando.github.io/apt stable main" \
-  | sudo tee /etc/apt/sources.list.d/dedcom.list
-sudo apt update && sudo apt install dedcom
+  | tee /etc/apt/sources.list.d/dedcom.list
+apt update && apt install dedcom
 ```
 
 हर GitHub रिलीज़ के साथ पूर्व-निर्मित बाइनरी संलग्न होती हैं (amd64 और arm64) — डाउनलोड करें, **सत्यापित करें**, फिर इंस्टॉल करें:
 
 ```sh
 tar xzf dedcom-<version>-<triple>.tar.gz
-sudo install -m 755 dedcom /usr/local/bin/dedcom
+install -m 755 dedcom /usr/local/bin/dedcom
 ```
 
 स्रोत से बिल्ड Docker-आधारित है, किसी स्थानीय Rust टूलचेन की ज़रूरत नहीं।

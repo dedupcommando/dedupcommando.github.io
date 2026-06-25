@@ -51,18 +51,19 @@ DedupCommando is designed for ZFS: snapshots, dataset-aware boundaries, and refl
 **Debian 13 / Proxmox VE 9+** — install from the signed APT repository (auto-updates via `apt upgrade`):
 
 ```sh
-sudo curl -fsSL https://dedupcommando.github.io/apt/dedcom-archive-keyring.gpg \
+# as root (Proxmox default); on non-root Debian run: sudo -i
+curl -fsSL https://dedupcommando.github.io/apt/dedcom-archive-keyring.gpg \
   -o /usr/share/keyrings/dedcom-archive-keyring.gpg
 echo "deb [signed-by=/usr/share/keyrings/dedcom-archive-keyring.gpg] https://dedupcommando.github.io/apt stable main" \
-  | sudo tee /etc/apt/sources.list.d/dedcom.list
-sudo apt update && sudo apt install dedcom
+  | tee /etc/apt/sources.list.d/dedcom.list
+apt update && apt install dedcom
 ```
 
 Pre-built binaries are attached to each GitHub release (amd64 and arm64) — download, **verify**, and install:
 
 ```sh
 tar xzf dedcom-<version>-<triple>.tar.gz
-sudo install -m 755 dedcom /usr/local/bin/dedcom
+install -m 755 dedcom /usr/local/bin/dedcom
 ```
 
 Building from source is Docker-based — no local Rust toolchain required.
