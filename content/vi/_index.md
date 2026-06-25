@@ -48,6 +48,16 @@ DedupCommando được thiết kế cho ZFS: ảnh chụp, ranh giới dataset v
 
 ## Bắt đầu
 
+**Debian 13 / Proxmox VE 9+** — cài đặt từ kho APT đã ký (tự cập nhật qua `apt upgrade`):
+
+```sh
+sudo curl -fsSL https://dedupcommando.github.io/apt/dedcom-archive-keyring.gpg \
+  -o /usr/share/keyrings/dedcom-archive-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/dedcom-archive-keyring.gpg] https://dedupcommando.github.io/apt stable main" \
+  | sudo tee /etc/apt/sources.list.d/dedcom.list
+sudo apt update && sudo apt install dedcom
+```
+
 Các bản dựng sẵn được đính kèm mỗi bản phát hành GitHub (amd64 và arm64) — tải về, **xác minh**, rồi cài đặt:
 
 ```sh

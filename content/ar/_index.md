@@ -48,6 +48,16 @@ DedupCommando أداة طرفية للينكس (CLI وTUI) للعثور على *
 
 ## البدء
 
+**Debian 13 / Proxmox VE 9+** — ثبّت من مستودع APT موقّع (تحديثات عبر `apt upgrade`):
+
+```sh
+sudo curl -fsSL https://dedupcommando.github.io/apt/dedcom-archive-keyring.gpg \
+  -o /usr/share/keyrings/dedcom-archive-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/dedcom-archive-keyring.gpg] https://dedupcommando.github.io/apt stable main" \
+  | sudo tee /etc/apt/sources.list.d/dedcom.list
+sudo apt update && sudo apt install dedcom
+```
+
 تُرفَق ثنائيات جاهزة مع كل إصدار على GitHub (amd64 وarm64) — نزّل، **تحقّق**، ثم ثبّت:
 
 ```sh

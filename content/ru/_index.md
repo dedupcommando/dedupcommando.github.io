@@ -48,6 +48,16 @@ DedupCommando рассчитан на ZFS: снимки, границы набо
 
 ## Начало работы
 
+**Debian 13 / Proxmox VE 9+** — установите из подписанного репозитория APT (обновления через `apt upgrade`):
+
+```sh
+sudo curl -fsSL https://dedupcommando.github.io/apt/dedcom-archive-keyring.gpg \
+  -o /usr/share/keyrings/dedcom-archive-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/dedcom-archive-keyring.gpg] https://dedupcommando.github.io/apt stable main" \
+  | sudo tee /etc/apt/sources.list.d/dedcom.list
+sudo apt update && sudo apt install dedcom
+```
+
 Готовые сборки приложены к каждому релизу на GitHub (amd64 и arm64) — скачайте, **проверьте** и установите:
 
 ```sh
