@@ -83,7 +83,7 @@
 {%- block body %}
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
-    <a class="brand" href="{{ get_url(path='/') | safe }}">DedupCommando</a>
+    <a class="brand" href="{{ get_url(path='@/_index.md') | safe }}">DedupCommando</a>
     <nav class="lang-switcher" aria-label="Language">
       {% for loc in config.extra.locales %}
         <a href="{{ get_url(path=loc.home) | safe }}"

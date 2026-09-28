@@ -9,11 +9,11 @@
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="{{ get_url(path='/') | safe }}">DedupCommando</a>
+    <a class="brand" href="{{ get_url(path='@/_index.md') | safe }}">DedupCommando</a>
   </header>
   <main class="content" id="main">
     <h1>Page not found</h1>
-    <p>There is no page at this address. Start from the <a href="{{ get_url(path='/') | safe }}">DedupCommando home page</a>,
+    <p>There is no page at this address. Start from the <a href="{{ get_url(path='@/_index.md') | safe }}">DedupCommando home page</a>,
        or go straight to the project on <a href="{{ config.extra.repo_url | safe }}">GitHub</a>.</p>
   </main>
 </body>
