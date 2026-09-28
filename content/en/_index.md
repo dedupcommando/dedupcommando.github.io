@@ -93,9 +93,10 @@ Each release ships SHA-256 checksums, minisign signatures, a CycloneDX SBOM and 
 
 ## Guides
 
-- [File-level deduplication for datasets stored on ZFS](@/en/zfs-file-deduplication/_index.md)
+- [Offline, file-level deduplication on ZFS: an alternative to dedup=on](@/en/zfs-file-deduplication/_index.md)
 - [Duplicate files on Proxmox VE storage](@/en/proxmox-ve-duplicate-files/_index.md)
 - [The Linux duplicate file finder](@/en/linux-duplicate-file-finder/_index.md)
 - [Hardlink vs reflink](@/en/hardlink-vs-reflink/_index.md)
 - [Safe duplicate deletion and recovery](@/en/safety-and-recovery/_index.md)
 - [Frequently asked questions](@/en/faq/_index.md)
+- [DedupCommando compared with fdupes, jdupes, rmlint, fclones, Czkawka and others](@/en/compare/_index.md)
