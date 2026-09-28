@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Page not found — DedupCommando</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="{{ get_url(path='assets/css/site.css') | safe }}">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="{{ get_url(path='/') | safe }}">DedupCommando</a>
+  </header>
+  <main class="content" id="main">
+    <h1>Page not found</h1>
+    <p>There is no page at this address. Start from the <a href="{{ get_url(path='/') | safe }}">DedupCommando home page</a>,
+       or go straight to the project on <a href="{{ config.extra.repo_url | safe }}">GitHub</a>.</p>
+  </main>
+</body>
+</html>

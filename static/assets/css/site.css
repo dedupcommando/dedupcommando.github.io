@@ -94,3 +94,13 @@ h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); line-height: 1.2; }
 }
 .site-footer a { color: var(--accent); }
 .trademarks { margin-block-start: .5rem; }
+
+/* "Get it on GitHub" block at the end of every English page: the site exists to send people to the repo. */
+.cta {
+  margin-block-start: 2.5rem;
+  padding: .9rem 1rem;
+  border: 1px solid var(--rule);
+  border-inline-start: 4px solid var(--accent);
+  border-radius: .35rem;
+}
+.cta p { margin: 0; }
