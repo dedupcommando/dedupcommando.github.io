@@ -69,4 +69,4 @@ install -m 755 dedcom /usr/local/bin/dedcom
 स्रोत से बिल्ड Docker-आधारित है, किसी स्थानीय Rust टूलचेन की ज़रूरत नहीं।
 
 - [नवीनतम रिलीज़](https://github.com/dedupcommando/DedupCommando/releases) · [GitHub पर स्रोत](https://github.com/dedupcommando/DedupCommando)
-- अधिक विवरण (अंग्रेज़ी में): [ZFS पर डुप्लिकेट](@/en/zfs-file-deduplication/_index.md) · [Proxmox VE पर](@/en/proxmox-ve-duplicate-files/_index.md) · [Linux डुप्लिकेट फ़ाइल खोजक](@/en/linux-duplicate-file-finder/_index.md) · [hardlink बनाम reflink](@/en/hardlink-vs-reflink/_index.md) · [सुरक्षा और रिकवरी](@/en/safety-and-recovery/_index.md) · [दस्तावेज़](@/en/docs/_index.md)
+- अधिक विवरण (अंग्रेज़ी में): [ZFS पर डुप्लिकेट](@/en/zfs-file-deduplication/_index.md) · [Proxmox VE पर](@/en/proxmox-ve-duplicate-files/_index.md) · [Linux डुप्लिकेट फ़ाइल खोजक](@/en/linux-duplicate-file-finder/_index.md) · [hardlink बनाम reflink](@/en/hardlink-vs-reflink/_index.md) · [सुरक्षा और रिकवरी](@/en/safety-and-recovery/_index.md) · [दस्तावेज़](@/en/_index.md)

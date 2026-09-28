@@ -69,4 +69,4 @@ install -m 755 dedcom /usr/local/bin/dedcom
 La compilación desde el código fuente se hace con Docker, sin necesidad de un toolchain de Rust local.
 
 - [Última versión](https://github.com/dedupcommando/DedupCommando/releases) · [Código en GitHub](https://github.com/dedupcommando/DedupCommando)
-- Más detalles (en inglés): [duplicados en ZFS](@/en/zfs-file-deduplication/_index.md) · [en Proxmox VE](@/en/proxmox-ve-duplicate-files/_index.md) · [buscador de duplicados en Linux](@/en/linux-duplicate-file-finder/_index.md) · [hardlink vs reflink](@/en/hardlink-vs-reflink/_index.md) · [seguridad y recuperación](@/en/safety-and-recovery/_index.md) · [documentación](@/en/docs/_index.md)
+- Más detalles (en inglés): [duplicados en ZFS](@/en/zfs-file-deduplication/_index.md) · [en Proxmox VE](@/en/proxmox-ve-duplicate-files/_index.md) · [buscador de duplicados en Linux](@/en/linux-duplicate-file-finder/_index.md) · [hardlink vs reflink](@/en/hardlink-vs-reflink/_index.md) · [seguridad y recuperación](@/en/safety-and-recovery/_index.md) · [documentación](@/en/_index.md)

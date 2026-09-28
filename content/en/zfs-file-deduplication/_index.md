@@ -28,4 +28,4 @@ This is **file-level** deduplication: it finds and removes duplicate *files*. It
 - ZFS with `zfs` in `PATH`; typically run as root.
 - Reflink needs `zpool feature@block_cloning=active` (ZFS 2.3+).
 
-**Beta (v0.9.0-beta.1).** Read [safety & recovery](@/en/safety-and-recovery/_index.md) before applying actions, and keep backups. · [Documentation](@/en/docs/_index.md) · [Source on GitHub](https://github.com/dedupcommando/DedupCommando)
+**Beta (v0.9.0-beta.1).** Read [safety & recovery](@/en/safety-and-recovery/_index.md) before applying actions, and keep backups. · [Documentation](@/en/_index.md) · [Source on GitHub](https://github.com/dedupcommando/DedupCommando)

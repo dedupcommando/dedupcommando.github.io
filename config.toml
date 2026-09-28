@@ -22,7 +22,7 @@ repo_url = "https://github.com/dedupcommando/DedupCommando"
 # Published locales. `home` is the content path of each locale's home page: the hreflang cluster, the
 # language switcher and x-default (the "en" home) are all built from it.
 locales = [
-  { slug = "en",      home = "@/en/_index.md",      hreflang = "en",      name = "English",            dir = "ltr", og_locale = "en_US" },
+  { slug = "en",      home = "@/_index.md",         hreflang = "en",      name = "English",            dir = "ltr", og_locale = "en_US" },
   { slug = "ar",      home = "@/ar/_index.md",      hreflang = "ar",      name = "العربية",             dir = "rtl", og_locale = "ar_AR" },
   { slug = "vi",      home = "@/vi/_index.md",      hreflang = "vi",      name = "Tiếng Việt",         dir = "ltr", og_locale = "vi_VN" },
   { slug = "es",      home = "@/es/_index.md",      hreflang = "es",      name = "Español",            dir = "ltr", og_locale = "es_ES" },
@@ -36,6 +36,6 @@ locales = [
 # Breadcrumb trail entries. Generated pages name them in `extra.crumbs` (e.g. ["docs", "manual"]);
 # the trail always starts at the English home.
 [extra.crumbs]
-docs = { name = "Docs", path = "@/en/docs/_index.md" }
+docs = { name = "Docs", path = "@/en/_index.md" }
 manual = { name = "Manual", path = "@/en/manual/_index.md" }
 changelog = { name = "Release notes", path = "@/en/changelog/_index.md" }

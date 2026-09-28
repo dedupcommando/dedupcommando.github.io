@@ -1,0 +1,451 @@
+{% extends "base.html" %}
+{# The retro "dedcom 95" desktop is the home page. The <head> (title, canonical, hreflang, Open Graph,
+   structured data) comes from base.html; this template supplies the desktop itself. #}
+{% block styles %}<link rel="stylesheet" href="{{ get_url(path='assets/retro.css', cachebust=true) | safe }}">{% endblock styles %}
+{% block head_extra %}
+  <meta name="theme-color" content="#0e7f7f">
+  <link rel="icon" href="{{ get_url(path='assets/logo.png') | safe }}" type="image/png">
+  <script src="{{ get_url(path='assets/app.js', cachebust=true) | safe }}" defer></script>
+  <script src="{{ get_url(path='assets/retro.js', cachebust=true) | safe }}" defer></script>
+  <noscript><style>
+    #boot { display: none; }
+    body { overflow: auto; }
+    #desktop { position: static; overflow: visible; padding: 8px 8px 52px; }
+    #icons { display: none; }
+    .win { display: flex; position: relative; left: auto !important; top: auto !important; width: auto !important;
+           max-width: 880px; margin: 0 auto 12px; }
+    .wm { position: static; text-align: start; margin: 4px auto 12px; max-width: 880px; }
+  </style></noscript>
+{% endblock head_extra %}
+{% block body %}
+{%- set rel = load_data(path="data/release.json") %}
+
+<!-- пиксельные иконки: рисуются один раз, дальше — через use -->
+<svg aria-hidden="true" style="position:absolute;width:0;height:0">
+  <defs>
+    <g id="i-term">
+      <rect x="2" y="4" width="28" height="21" rx="2" fill="#20242c" stroke="#c8ccd4" stroke-width="2"/>
+      <path d="M7 10.5l5 4-5 4" stroke="#39d353" stroke-width="2.4" fill="none"/>
+      <path d="M14 18.5h9" stroke="#39d353" stroke-width="2.4"/>
+      <rect x="11" y="27" width="10" height="2.5" fill="#9aa0aa"/>
+    </g>
+    <g id="i-folder">
+      <path d="M2 8a2 2 0 0 1 2-2h8l3 4h13a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z" fill="#f6c944" stroke="#8a6d1f" stroke-width="1.6"/>
+      <path d="M2 13h28v13a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z" fill="#ffe07d" stroke="#8a6d1f" stroke-width="1.6"/>
+    </g>
+    <g id="i-doc">
+      <path d="M6 2h14l6 6v22H6z" fill="#fff" stroke="#5b6570" stroke-width="1.8"/>
+      <path d="M20 2v6h6" fill="#d7dde6" stroke="#5b6570" stroke-width="1.8"/>
+      <path d="M10 14h12M10 18h12M10 22h8" stroke="#3b6ea5" stroke-width="1.8"/>
+    </g>
+    <g id="i-card">
+      <rect x="2" y="6" width="28" height="20" rx="2" fill="#fff" stroke="#5b6570" stroke-width="1.8"/>
+      <rect x="2.9" y="6.9" width="26.2" height="3.6" fill="#b23c17"/>
+      <rect x="5.5" y="13" width="8" height="9" fill="#9db8d2" stroke="#5b6570"/>
+      <path d="M17 14.5h10M17 18h10M17 21.5h6" stroke="#3b6ea5" stroke-width="1.8"/>
+    </g>
+    <g id="i-shield">
+      <path d="M16 2l12 4v9c0 8-5 13-12 15C9 28 4 23 4 15V6z" fill="#2f6fb8" stroke="#123c6e" stroke-width="1.8"/>
+      <path d="M16 2l12 4v9c0 8-5 13-12 15z" fill="#4d8ed6"/>
+      <path d="M10 15.5l4 4 8-8" stroke="#fff" stroke-width="2.6" fill="none"/>
+    </g>
+    <g id="i-floppy">
+      <path d="M4 4h21l3 3v21H4z" fill="#2b3f8c" stroke="#101b45" stroke-width="1.8"/>
+      <rect x="9" y="4" width="12" height="8" fill="#c9d2e8"/>
+      <rect x="16" y="5.5" width="3.4" height="5" fill="#2b3f8c"/>
+      <rect x="8" y="17" width="16" height="9" fill="#fff" stroke="#101b45"/>
+      <path d="M10 20h12M10 23h9" stroke="#5b6570" stroke-width="1.5"/>
+    </g>
+    <g id="i-help">
+      <rect x="4" y="3" width="24" height="26" rx="3" fill="#7b5cd6" stroke="#3f2d80" stroke-width="1.8"/>
+      <text x="16" y="23" text-anchor="middle" font-family="Tahoma, sans-serif" font-size="19" font-weight="700" fill="#fff">?</text>
+    </g>
+    <g id="i-globe">
+      <circle cx="16" cy="16" r="13" fill="#3f8ed0" stroke="#164a78" stroke-width="1.8"/>
+      <ellipse cx="16" cy="16" rx="6" ry="13" fill="none" stroke="#d6ecff" stroke-width="1.5"/>
+      <path d="M3.5 16h25M5.5 9.5h21M5.5 22.5h21" stroke="#d6ecff" stroke-width="1.5" fill="none"/>
+    </g>
+    <g id="i-back">
+      <use href="#i-globe"/>
+      <path d="M29 24H17m0 0l4.5-4.5M17 24l4.5 4.5" stroke="#0a3d18" stroke-width="4.6" fill="none"/>
+      <path d="M29 24H17m0 0l4.5-4.5M17 24l4.5 4.5" stroke="#39d353" stroke-width="2.4" fill="none"/>
+    </g>
+    <g id="i-lang">
+      <use href="#i-globe"/>
+      <text x="16" y="21.5" text-anchor="middle" font-family="Tahoma, sans-serif" font-size="13" font-weight="700" fill="#0b2c4a">EN</text>
+    </g>
+    <g id="i-dl">
+      <rect x="5" y="17" width="22" height="11" fill="#c9a25e" stroke="#7a5b23" stroke-width="1.8"/>
+      <path d="M5 17l11-4 11 4" fill="#e7c894" stroke="#7a5b23" stroke-width="1.8"/>
+      <path d="M16 2v9m0 0l-4-4m4 4l4-4" stroke="#1f8f4d" stroke-width="2.6" fill="none"/>
+    </g>
+  </defs>
+</svg>
+
+<!-- бут-экран -->
+<div id="boot" role="presentation">
+  <div class="ln" style="--t:.05s">DEDCOM BIOS v0.9 — Deduplication Environment</div>
+  <div class="ln" style="--t:.3s">Memory test ......... 32768 MB <span class="ok">OK</span></div>
+  <div class="ln" style="--t:.65s">Pool tank ........... ONLINE · 6,2T used <span class="ok">OK</span></div>
+  <div class="ln" style="--t:1s">Snapshot safety ..... <span class="ok">ARMED</span></div>
+  <div class="ln" style="--t:1.35s">Запуск рабочего стола dedcom 95 …</div>
+  <div class="ln hint" style="--t:1.5s">(щелчок или любая клавиша — пропустить)</div>
+</div>
+
+<!-- экран «выключения» -->
+<div id="off">
+  <div>
+    Теперь ваш пул можно выключить.<br>Снапшот сохранён.
+    <small>щёлкните, чтобы вернуться к работе</small>
+  </div>
+</div>
+
+<main id="desktop" aria-label="Рабочий стол dedcom 95">
+
+  <h1 class="wm">DedupCommando<small>находит одинаковые файлы в Linux и ZFS и безопасно освобождает место · v{{ rel.version }}</small></h1>
+
+  <div id="icons">
+    <button class="icon" data-open="demo"><svg class="ic" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-term"/></svg><span>dedcom.exe</span></button>
+    <button class="icon" data-open="about"><svg class="ic" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-doc"/></svg><span>О программе.txt</span></button>
+    <button class="icon" data-open="features"><svg class="ic" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-folder"/></svg><span>Возможности</span></button>
+    <button class="icon" data-open="passport"><svg class="ic" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-card"/></svg><span>Паспорт изделия</span></button>
+    <button class="icon" data-open="safety"><svg class="ic" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-shield"/></svg><span>Безопасность</span></button>
+    <button class="icon" data-open="install"><svg class="ic" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-floppy"/></svg><span>Установка</span></button>
+    <button class="icon" data-open="faq"><svg class="ic" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-help"/></svg><span>Вопросы и ответы</span></button>
+    <button class="icon" data-open="dl"><svg class="ic" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-dl"/></svg><span>Скачать бету</span></button>
+    <button class="icon" data-href="https://github.com/dedupcommando/DedupCommando" data-blank><svg class="ic" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-globe"/></svg><span>GitHub</span></button>
+    <button class="icon" data-href="{{ get_url(path='@/_index.md') | safe }}"><svg class="ic" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-lang"/></svg><span>English version</span></button>
+    <button class="icon" data-open="docs"><svg class="ic" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-doc"/></svg><span>Документация</span></button>
+  </div>
+
+  <!-- ============================== ОКНА ============================== -->
+
+  <section class="win r-out" id="win-about" data-title="О программе.txt — Блокнот" data-ico="#i-doc"
+           style="left:120px; top:56px; width:520px" role="dialog" aria-label="О программе">
+    <header class="tbar">
+      <svg class="tbar-ico" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-doc"/></svg>
+      <h2 class="tbar-title">О программе.txt — Блокнот</h2>
+      <button class="b95 tb-btn" data-act="min" aria-label="Свернуть"><svg viewBox="0 0 9 9"><path d="M0 7.5h9" stroke="currentColor" stroke-width="2"/></svg></button>
+      <button class="b95 tb-btn" data-act="max" aria-label="Развернуть"><svg viewBox="0 0 9 9"><rect x="1" y="1" width="7" height="7" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+      <button class="b95 tb-btn" data-act="close" aria-label="Закрыть"><svg viewBox="0 0 9 9"><path d="M1 1l7 7M8 1L1 8" stroke="currentColor" stroke-width="1.7"/></svg></button>
+    </header>
+    <div class="win-body tight">
+      <div class="sunken pad">DedupCommando — консольный командир дедупликации
+для ZFS-пулов Proxmox.
+
+Находит идентичные файлы, собирает их в группы
+и возвращает терабайты — со снапшотом-страховкой
+перед каждым действием.
+
+  · один бинарь, без демона, по SSH
+  · blake3 + побайтовая сверка, атомарные операции
+  · обкатка на боевом Proxmox-хосте: 6+ ТБ
+
+Двойной щелчок по значкам открывает разделы.</div>
+      <div class="btn-row">
+        <button class="b95" data-open="demo">Запустить демо</button>
+        <button class="b95" data-open="install">Установка</button>
+        <a class="b95" href="https://github.com/dedupcommando/DedupCommando" target="_blank" rel="noopener">GitHub</a>
+      </div>
+      <p class="muted tm">Proxmox® — зарегистрированный товарный знак Proxmox Server Solutions GmbH. DedupCommando —
+        независимый проект, не связанный с этой компанией и не одобренный ею.</p>
+
+    </div>
+  </section>
+
+  <section class="win r-out" id="win-demo" data-title="dedcom.exe — сеанс SSH" data-ico="#i-term"
+           style="left:64px; top:40px; width:860px" role="dialog" aria-label="Демонстрация dedcom">
+    <header class="tbar">
+      <svg class="tbar-ico" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-term"/></svg>
+      <h2 class="tbar-title">dedcom.exe — ssh root@pve</h2>
+      <button class="b95 tb-btn" data-act="min" aria-label="Свернуть"><svg viewBox="0 0 9 9"><path d="M0 7.5h9" stroke="currentColor" stroke-width="2"/></svg></button>
+      <button class="b95 tb-btn" data-act="max" aria-label="Развернуть"><svg viewBox="0 0 9 9"><rect x="1" y="1" width="7" height="7" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+      <button class="b95 tb-btn" data-act="close" aria-label="Закрыть"><svg viewBox="0 0 9 9"><path d="M1 1l7 7M8 1L1 8" stroke="currentColor" stroke-width="1.7"/></svg></button>
+    </header>
+    <div class="win-body tight term">
+      <div class="term-tabs" role="tablist" aria-label="Сцены демонстрации">
+        <button class="b95 term-tab" role="tab" aria-selected="true">Скан</button>
+        <button class="b95 term-tab" role="tab" aria-selected="false">Группы</button>
+        <button class="b95 term-tab" role="tab" aria-selected="false">Действие</button>
+        <span class="term-status" aria-hidden="true">▶ автопоказ</span>
+      </div>
+      <div class="term-viewport sunken">
+        <pre class="term-screen" id="term-screen" aria-hidden="true">
+── для живого демо нужен JavaScript ──</pre>
+      </div>
+      <p class="visually-hidden">Анимированная демонстрация интерфейса dedcom:
+        скан пула, таблица групп дубликатов и диалог действия со снапшотом.</p>
+    </div>
+  </section>
+
+  <section class="win r-out" id="win-features" data-title="Возможности" data-ico="#i-folder"
+           style="left:180px; top:84px; width:640px" role="dialog" aria-label="Возможности">
+    <header class="tbar">
+      <svg class="tbar-ico" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-folder"/></svg>
+      <h2 class="tbar-title">Возможности</h2>
+      <button class="b95 tb-btn" data-act="min" aria-label="Свернуть"><svg viewBox="0 0 9 9"><path d="M0 7.5h9" stroke="currentColor" stroke-width="2"/></svg></button>
+      <button class="b95 tb-btn" data-act="max" aria-label="Развернуть"><svg viewBox="0 0 9 9"><rect x="1" y="1" width="7" height="7" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+      <button class="b95 tb-btn" data-act="close" aria-label="Закрыть"><svg viewBox="0 0 9 9"><path d="M1 1l7 7M8 1L1 8" stroke="currentColor" stroke-width="1.7"/></svg></button>
+    </header>
+    <div class="win-body">
+      <div class="gb-grid">
+        <fieldset class="gb"><legend>Двухпанельный TUI</legend>
+          <p>Группы слева, файлы справа, всё с клавиатуры. SSH, tmux, хоть консоль IPMI. Для первого раза — мастер <code>--classic</code>.</p></fieldset>
+        <fieldset class="gb"><legend>Снапшот перед действием</legend>
+          <p>ZFS-снапшот создаётся автоматически до удаления или hardlink. Откат — одной командой.</p></fieldset>
+        <fieldset class="gb"><legend>Сверка, а не вера</legend>
+          <p>blake3, побайтовая сверка групп и ре-хеш прямо перед действием. Изменился байт — отмена.</p></fieldset>
+        <fieldset class="gb"><legend>Атомарно или никак</legend>
+          <p>renameat2(RENAME_NOREPLACE) вместо «проверил — потом переименовал». Гонок нет по построению.</p></fieldset>
+        <fieldset class="gb"><legend>Профиль Idle</legend>
+          <p>Скан уступает диски виртуалкам и бэкапам. Боевой хост не заметит.</p></fieldset>
+        <fieldset class="gb"><legend>Чекпойнты</legend>
+          <p>Состояние в dedcom.db: прервали скан — продолжится с того же места.</p></fieldset>
+        <fieldset class="gb"><legend>Один бинарь на Rust</legend>
+          <p>Файл dedcom — и всё. Без зависимостей, демонов и веб-морды.</p></fieldset>
+        <fieldset class="gb"><legend>Headless для скриптов</legend>
+          <p>--scan, --stats, --export-csv — для cron и отчётов.</p></fieldset>
+      </div>
+      <div class="statusbar"><span>Объектов: 8</span><span>Скрытых функций: 0</span></div>
+    </div>
+  </section>
+
+  <section class="win r-out" id="win-passport" data-title="Паспорт изделия" data-ico="#i-card"
+           style="left:520px; top:120px; width:420px" role="dialog" aria-label="Паспорт изделия">
+    <header class="tbar">
+      <svg class="tbar-ico" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-card"/></svg>
+      <h2 class="tbar-title">Паспорт изделия — DC-SPEC-09</h2>
+      <button class="b95 tb-btn" data-act="min" aria-label="Свернуть"><svg viewBox="0 0 9 9"><path d="M0 7.5h9" stroke="currentColor" stroke-width="2"/></svg></button>
+      <button class="b95 tb-btn" data-act="close" aria-label="Закрыть"><svg viewBox="0 0 9 9"><path d="M1 1l7 7M8 1L1 8" stroke="currentColor" stroke-width="1.7"/></svg></button>
+    </header>
+    <div class="win-body tight">
+      <div class="sunken plate">
+        <dl>
+          <dt>Изделие</dt><dd>dedcom</dd>
+          <dt>Тип</dt><dd>TUI-утилита дедупликации</dd>
+          <dt>Платформа</dt><dd>Linux x86-64 / arm64 · OpenZFS ≥ 2.1</dd>
+          <dt>Среда</dt><dd>Proxmox VE (родная)</dd>
+          <dt>Хеш</dt><dd>blake3 + побайтовая сверка</dd>
+          <dt>Статус</dt><dd>v{{ rel.version }} (бета) · {{ rel.date | truncate(length=4, end="") }}</dd>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="win r-out" id="win-safety" data-title="Свойства: Безопасность" data-ico="#i-shield"
+           style="left:240px; top:64px; width:540px" role="dialog" aria-label="Безопасность">
+    <header class="tbar">
+      <svg class="tbar-ico" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-shield"/></svg>
+      <h2 class="tbar-title">Свойства: Безопасность</h2>
+      <button class="b95 tb-btn" data-act="min" aria-label="Свернуть"><svg viewBox="0 0 9 9"><path d="M0 7.5h9" stroke="currentColor" stroke-width="2"/></svg></button>
+      <button class="b95 tb-btn" data-act="max" aria-label="Развернуть"><svg viewBox="0 0 9 9"><rect x="1" y="1" width="7" height="7" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+      <button class="b95 tb-btn" data-act="close" aria-label="Закрыть"><svg viewBox="0 0 9 9"><path d="M1 1l7 7M8 1L1 8" stroke="currentColor" stroke-width="1.7"/></svg></button>
+    </header>
+    <div class="win-body">
+      <p class="muted" style="margin-bottom:10px">Протокол безопасности встроен и не отключается —
+        поэтому флажки серые:</p>
+      <div class="chk"><span class="box" aria-hidden="true">✓</span><b>Снапшот-страховка</b>
+        <p>ZFS-снапшот автоматически перед каждым действием. Секунды на боевом пуле — и спасённые терабайты.</p></div>
+      <div class="chk"><span class="box" aria-hidden="true">✓</span><b>Повторная сверка</b>
+        <p>Прямо перед действием — ре-хеш. Расхождение — стоп, группа на пересмотр.</p></div>
+      <div class="chk"><span class="box" aria-hidden="true">✓</span><b>Атомарные операции</b>
+        <p>renameat2(RENAME_NOREPLACE): состояние гонки исключено самим системным вызовом.</p></div>
+      <div class="chk"><span class="box" aria-hidden="true">✓</span><b>Карантин вместо пропасти</b>
+        <p>«Удаление» переносит файлы в карантин. Вернуть можно точечно, без отката снапшота.</p></div>
+      <div class="warn"><span class="wi" aria-hidden="true">⚠</span>
+        <span>На ZFS деструктивная партия не запускается без снапшота: если снапшот не создался,
+        партия отменяется. Это инвариант в коде, а не настройка. Без ZFS снапшота нет,
+        поэтому применять действия там не рекомендуется.</span></div>
+      <div class="btn-row"><button class="b95" data-close>OK</button></div>
+    </div>
+  </section>
+
+  <section class="win r-out" id="win-install" data-title="Установка" data-ico="#i-floppy"
+           style="left:150px; top:48px; width:700px" role="dialog" aria-label="Установка">
+    <header class="tbar">
+      <svg class="tbar-ico" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-floppy"/></svg>
+      <h2 class="tbar-title">Установка dedcom</h2>
+      <button class="b95 tb-btn" data-act="min" aria-label="Свернуть"><svg viewBox="0 0 9 9"><path d="M0 7.5h9" stroke="currentColor" stroke-width="2"/></svg></button>
+      <button class="b95 tb-btn" data-act="max" aria-label="Развернуть"><svg viewBox="0 0 9 9"><rect x="1" y="1" width="7" height="7" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+      <button class="b95 tb-btn" data-act="close" aria-label="Закрыть"><svg viewBox="0 0 9 9"><path d="M1 1l7 7M8 1L1 8" stroke="currentColor" stroke-width="1.7"/></svg></button>
+    </header>
+    <div class="win-body">
+      <div class="sunken" style="margin-bottom:10px">
+        <table class="lv">
+          <thead><tr><th>Параметр</th><th>Значение</th></tr></thead>
+          <tbody>
+            <tr><td>ОС</td><td>Linux x86-64 или arm64, glibc ≥ 2.39</td></tr>
+            <tr><td>ФС</td><td>OpenZFS ≥ 2.1 (обкатано на 2.4.3)</td></tr>
+            <tr><td>Среда</td><td>Proxmox VE; подойдёт любой хост с ZFS</td></tr>
+            <tr><td>Терминал</td><td>любой с 256 цветами, по SSH и в tmux</td></tr>
+            <tr><td>Доступ</td><td>root на хосте пула</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="sunken" style="margin-bottom:10px">
+        <div class="lst-bar"><span>Листинг 1 — установка из APT-репозитория (Debian 13, Proxmox VE 9+)</span>
+          <button class="b95 copy" data-copy="#r-inst-a">копировать</button></div>
+        <pre class="lst" id="r-inst-a"><span class="cm"># от root (так по умолчанию в Proxmox); в Debian без root: sudo -i</span>
+<span class="kw">curl</span> -fsSL https://dedupcommando.github.io/apt/dedcom-archive-keyring.gpg \
+  -o /usr/share/keyrings/dedcom-archive-keyring.gpg
+<span class="kw">echo</span> "deb [signed-by=/usr/share/keyrings/dedcom-archive-keyring.gpg] https://dedupcommando.github.io/apt stable main" \
+  | tee /etc/apt/sources.list.d/dedcom.list
+<span class="kw">apt</span> update &amp;&amp; <span class="kw">apt</span> install dedcom
+<span class="kw">dedcom</span> --classic            <span class="cm"># пошаговый мастер для первого раза</span></pre>
+      </div>
+
+      <div class="sunken">
+        <div class="lst-bar"><span>Листинг 2 — сначала репетиция</span>
+          <button class="b95 copy" data-copy="#r-inst-b">копировать</button></div>
+        <pre class="lst" id="r-inst-b"><span class="cm"># одноразовый loopback-пул с дубликатами: полигон без риска</span>
+<span class="kw">./scripts/make-test-pool.sh</span>
+<span class="kw">dedcom</span>                      <span class="cm"># потренируйтесь, потом на боевой</span></pre>
+      </div>
+
+      <p class="muted" style="margin-top:10px">Другие Linux с glibc 2.39 и новее: скачайте
+        <a href="https://github.com/dedupcommando/DedupCommando/releases" target="_blank" rel="noopener">релиз на GitHub</a>,
+        <a href="{{ get_url(path='@/en/verifying-releases.md') | safe }}">проверьте его</a> и скопируйте бинарь на хост.
+        Подробно — в <a href="{{ get_url(path='@/en/manual/02-install.md') | safe }}">главе руководства об установке</a> (на английском).</p>
+    </div>
+  </section>
+
+  <section class="win r-out" id="win-faq" data-title="Вопросы и ответы" data-ico="#i-help"
+           style="left:300px; top:96px; width:560px" role="dialog" aria-label="Вопросы и ответы">
+    <header class="tbar">
+      <svg class="tbar-ico" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-help"/></svg>
+      <h2 class="tbar-title">Справка: вопросы и ответы</h2>
+      <button class="b95 tb-btn" data-act="min" aria-label="Свернуть"><svg viewBox="0 0 9 9"><path d="M0 7.5h9" stroke="currentColor" stroke-width="2"/></svg></button>
+      <button class="b95 tb-btn" data-act="max" aria-label="Развернуть"><svg viewBox="0 0 9 9"><rect x="1" y="1" width="7" height="7" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+      <button class="b95 tb-btn" data-act="close" aria-label="Закрыть"><svg viewBox="0 0 9 9"><path d="M1 1l7 7M8 1L1 8" stroke="currentColor" stroke-width="1.7"/></svg></button>
+    </header>
+    <div class="win-body faq">
+      <details open>
+        <summary>Насколько это безопасно на боевом хосте?</summary>
+        <p>Перед любым деструктивным действием — автоматический ZFS-снапшот, повторная сверка
+          и атомарные операции. «Удалённое» уходит в карантин. Худший сценарий — откат снапшота
+          одной командой. Профиль Idle не отбирает I/O у виртуалок.</p>
+      </details>
+      <details>
+        <summary>Hardlink? А что с клонированием блоков?</summary>
+        <p>Классический режим — hardlink. Где OpenZFS умеет block cloning, доступен reflink —
+          файлы независимы, но делят блоки. Результат проверяется по фактическому размещению
+          данных, а не по косвенным счётчикам.</p>
+      </details>
+      <details>
+        <summary>Почему TUI, а не веб-интерфейс?</summary>
+        <p>Лишний демон и порт на хранилище — минус к безопасности. SSH уже есть; dedcom рисует
+          интерфейс в любом терминале. Для скриптов — headless: --scan, --stats, --export-csv.</p>
+      </details>
+      <details>
+        <summary>Скан на терабайтах прервался — всё заново?</summary>
+        <p>Нет: состояние в чекпойнтах (dedcom.db), после перезапуска скан продолжится
+          с места остановки.</p>
+      </details>
+      <details>
+        <summary>Что нужно для запуска?</summary>
+        <p>Linux x86-64 или arm64 с glibc 2.39 и новее (Debian 13, Ubuntu 24.04, Proxmox VE 9),
+          пул OpenZFS и терминал. Один бинарь, без демона. Proxmox VE — родная среда, но подойдёт
+          любой хост с ZFS.</p>
+      </details>
+    </div>
+  </section>
+
+  <section class="win r-out dialog" id="win-dl" data-title="Загрузка" data-ico="#i-dl"
+           style="left:calc(50% - 200px); top:26%; width:400px" role="alertdialog" aria-label="Загрузка">
+    <header class="tbar">
+      <svg class="tbar-ico" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-dl"/></svg>
+      <h2 class="tbar-title">Загрузка dedcom</h2>
+      <button class="b95 tb-btn" data-act="close" aria-label="Закрыть"><svg viewBox="0 0 9 9"><path d="M1 1l7 7M8 1L1 8" stroke="currentColor" stroke-width="1.7"/></svg></button>
+    </header>
+    <div class="win-body">
+      <div style="display:flex; gap:12px; align-items:flex-start">
+        <svg width="34" height="34" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-dl"/></svg>
+        <p style="margin:0">В Debian 13 и Proxmox VE 9 ставится через apt (см. окно «Установка»).
+          На других Linux с glibc 2.39 и новее скачайте релиз на GitHub, проверьте его и скопируйте
+          бинарь на хост.</p>
+      </div>
+      <div class="btn-row">
+        <a class="b95" href="https://github.com/dedupcommando/DedupCommando/releases" target="_blank" rel="noopener">Открыть релизы</a>
+        <button class="b95" data-open="install">Установка</button>
+        <button class="b95" data-close>OK</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="win r-out" id="win-docs" data-title="Документация" data-ico="#i-doc"
+           style="left:180px; top:60px; width:560px" role="dialog" aria-label="Документация">
+    <header class="tbar">
+      <svg class="tbar-ico" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-doc"/></svg>
+      <h2 class="tbar-title">Документация — справка</h2>
+      <button class="b95 tb-btn" data-act="min" aria-label="Свернуть"><svg viewBox="0 0 9 9"><path d="M0 7.5h9" stroke="currentColor" stroke-width="2"/></svg></button>
+      <button class="b95 tb-btn" data-act="max" aria-label="Развернуть"><svg viewBox="0 0 9 9"><rect x="1" y="1" width="7" height="7" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+      <button class="b95 tb-btn" data-act="close" aria-label="Закрыть"><svg viewBox="0 0 9 9"><path d="M1 1l7 7M8 1L1 8" stroke="currentColor" stroke-width="1.7"/></svg></button>
+    </header>
+    <div class="win-body">
+      <p class="muted">Разделы справки — обычные веб-страницы на английском. Руководство и заметки о выпусках соответствуют последнему релизу.</p>
+      <ul class="doc-links">
+        <li><a href="{{ get_url(path='@/en/_index.md') | safe }}">Установка и первый скан</a> — APT, бинарь из релиза, первый запуск</li>
+        <li><a href="{{ get_url(path='@/en/manual/_index.md') | safe }}">Руководство пользователя</a> — 14 глав: безопасность, сканирование, действия, Commando, headless, клавиши</li>
+        <li><a href="{{ get_url(path='@/en/safety-model.md') | safe }}">Безопасность, восстановление и ограничения</a></li>
+        <li><a href="{{ get_url(path='@/en/changelog/_index.md') | safe }}">Заметки о выпусках</a> — последний: v{{ rel.version }}</li>
+        <li><a href="{{ get_url(path='@/en/verifying-releases.md') | safe }}">Проверка релизов</a> — контрольные суммы, подписи, происхождение сборки</li>
+      </ul>
+      <p>Обзоры: <a href="{{ get_url(path='@/en/zfs-file-deduplication/_index.md') | safe }}">дедупликация файлов на ZFS</a> · <a href="{{ get_url(path='@/en/proxmox-ve-duplicate-files/_index.md') | safe }}">дубликаты на хранилище Proxmox VE</a> · <a href="{{ get_url(path='@/en/hardlink-vs-reflink/_index.md') | safe }}">hardlink или reflink</a> · <a href="{{ get_url(path='@/en/linux-duplicate-file-finder/_index.md') | safe }}">поиск дубликатов в Linux</a></p>
+      <div class="btn-row">
+        <a class="b95" href="https://github.com/dedupcommando/DedupCommando/releases" target="_blank" rel="noopener">Релизы на GitHub</a>
+        <a class="b95" href="https://github.com/dedupcommando/DedupCommando" target="_blank" rel="noopener">Исходники на GitHub</a>
+        <button class="b95" data-close>Закрыть</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="win r-out dialog" id="win-lang" data-title="Языки" data-ico="#i-lang"
+           style="left:calc(50% - 170px); top:20%; width:340px" role="dialog" aria-label="Языки">
+    <header class="tbar">
+      <svg class="tbar-ico" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-lang"/></svg>
+      <h2 class="tbar-title">Язык и региональные стандарты</h2>
+      <button class="b95 tb-btn" data-act="close" aria-label="Закрыть"><svg viewBox="0 0 9 9"><path d="M1 1l7 7M8 1L1 8" stroke="currentColor" stroke-width="1.7"/></svg></button>
+    </header>
+    <div class="win-body">
+      <p class="muted">Этот сайт на других языках. Сама программа и руководство — на английском.</p>
+      <ul class="doc-links">
+        {%- for loc in config.extra.locales %}
+        <li><a href="{{ get_url(path=loc.home) | safe }}" hreflang="{{ loc.hreflang }}" lang="{{ loc.hreflang }}">{{ loc.name }}</a></li>
+        {%- endfor %}
+      </ul>
+      <div class="btn-row"><button class="b95" data-close>OK</button></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- панель задач -->
+<footer id="taskbar" class="r-out" aria-label="Панель задач">
+  <button class="b95" id="startbtn" aria-expanded="false" aria-controls="startmenu">
+    <img src="{{ get_url(path='assets/logo.png') | safe }}" alt=""> Пуск
+  </button>
+  <div id="tasks" aria-label="Открытые окна"></div>
+  <div id="clock" class="sunken" aria-label="Время">--:--</div>
+</footer>
+
+<nav id="startmenu" class="r-out" aria-label="Меню Пуск">
+  <span class="sm-side" aria-hidden="true">dedcom&nbsp;95</span>
+  <div class="sm-list">
+    <button class="sm-item" data-open="demo"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#i-term"/></svg> dedcom.exe — демо</button>
+    <button class="sm-item" data-open="about"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#i-doc"/></svg> О программе</button>
+    <button class="sm-item" data-open="features"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#i-folder"/></svg> Возможности</button>
+    <button class="sm-item" data-open="safety"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#i-shield"/></svg> Безопасность</button>
+    <button class="sm-item" data-open="install"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#i-floppy"/></svg> Установка</button>
+    <button class="sm-item" data-open="faq"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#i-help"/></svg> Вопросы и ответы</button>
+    <div class="sm-sep" role="separator"></div>
+    <a class="sm-item" href="https://github.com/dedupcommando/DedupCommando" target="_blank" rel="noopener"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#i-globe"/></svg> GitHub ↗</a>
+    <a class="sm-item" href="{{ get_url(path='@/_index.md') | safe }}" hreflang="en" lang="en"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#i-lang"/></svg> English version</a>
+        <button class="sm-item" data-open="docs"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#i-doc"/></svg> Документация</button>
+    <button class="sm-item" data-open="lang"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#i-lang"/></svg> Языки</button>
+    <div class="sm-sep" role="separator"></div>
+    <button class="sm-item" data-act="minall"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#i-folder"/></svg> Свернуть все окна</button>
+    <button class="sm-item" data-act="off"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#i-shield"/></svg> Завершение работы…</button>
+  </div>
+</nav>
+{% endblock body %}

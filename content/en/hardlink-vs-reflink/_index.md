@@ -31,4 +31,4 @@ Prefer **reflink** when `block_cloning` is available — files keep independent 
 
 DedupCommando applies every action atomically (`renameat2(RENAME_NOREPLACE)`), re-validates content first, and runs the batch under a ZFS snapshot.
 
-**Beta (v0.9.0-beta.1).** [Safety & recovery](@/en/safety-and-recovery/_index.md) · [Documentation](@/en/docs/_index.md)
+**Beta (v0.9.0-beta.1).** [Safety & recovery](@/en/safety-and-recovery/_index.md) · [Documentation](@/en/_index.md)

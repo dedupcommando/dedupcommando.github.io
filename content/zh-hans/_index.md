@@ -69,4 +69,4 @@ install -m 755 dedcom /usr/local/bin/dedcom
 从源码构建基于 Docker，无需本地 Rust 工具链。
 
 - [最新发行版](https://github.com/dedupcommando/DedupCommando/releases) · [GitHub 源码](https://github.com/dedupcommando/DedupCommando)
-- 更多细节（英文）：[ZFS 上的重复文件](@/en/zfs-file-deduplication/_index.md) · [Proxmox VE 上](@/en/proxmox-ve-duplicate-files/_index.md) · [Linux 重复文件查找工具](@/en/linux-duplicate-file-finder/_index.md) · [hardlink 与 reflink](@/en/hardlink-vs-reflink/_index.md) · [安全与恢复](@/en/safety-and-recovery/_index.md) · [文档](@/en/docs/_index.md)
+- 更多细节（英文）：[ZFS 上的重复文件](@/en/zfs-file-deduplication/_index.md) · [Proxmox VE 上](@/en/proxmox-ve-duplicate-files/_index.md) · [Linux 重复文件查找工具](@/en/linux-duplicate-file-finder/_index.md) · [hardlink 与 reflink](@/en/hardlink-vs-reflink/_index.md) · [安全与恢复](@/en/safety-and-recovery/_index.md) · [文档](@/en/_index.md)

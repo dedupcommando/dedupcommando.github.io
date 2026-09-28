@@ -69,4 +69,4 @@ install -m 755 dedcom /usr/local/bin/dedcom
 البناء من المصدر يتم عبر Docker، دون حاجة إلى أدوات Rust محلية.
 
 - [أحدث إصدار](https://github.com/dedupcommando/DedupCommando/releases) · [الشيفرة على GitHub](https://github.com/dedupcommando/DedupCommando)
-- مزيد من التفاصيل (بالإنجليزية): [التكرار على ZFS](@/en/zfs-file-deduplication/_index.md) · [على Proxmox VE](@/en/proxmox-ve-duplicate-files/_index.md) · [باحث التكرارات على لينكس](@/en/linux-duplicate-file-finder/_index.md) · [hardlink مقابل reflink](@/en/hardlink-vs-reflink/_index.md) · [الأمان والاستعادة](@/en/safety-and-recovery/_index.md) · [التوثيق](@/en/docs/_index.md)
+- مزيد من التفاصيل (بالإنجليزية): [التكرار على ZFS](@/en/zfs-file-deduplication/_index.md) · [على Proxmox VE](@/en/proxmox-ve-duplicate-files/_index.md) · [باحث التكرارات على لينكس](@/en/linux-duplicate-file-finder/_index.md) · [hardlink مقابل reflink](@/en/hardlink-vs-reflink/_index.md) · [الأمان والاستعادة](@/en/safety-and-recovery/_index.md) · [التوثيق](@/en/_index.md)

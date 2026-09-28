@@ -24,4 +24,4 @@ This is **beta** software that performs destructive actions on real files. Try i
 
 > Proxmox® is a registered trademark of Proxmox Server Solutions GmbH. DedupCommando is an independent project and is not affiliated with or endorsed by Proxmox Server Solutions GmbH.
 
-[Documentation](@/en/docs/_index.md) · [Source on GitHub](https://github.com/dedupcommando/DedupCommando)
+[Documentation](@/en/_index.md) · [Source on GitHub](https://github.com/dedupcommando/DedupCommando)

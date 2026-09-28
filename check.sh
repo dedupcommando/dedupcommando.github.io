@@ -6,6 +6,7 @@
 set -u
 
 PUB="public"
+BASE=$(sed -n 's/^base_url *= *"\([^"]*\)".*/\1/p' config.toml)
 fail=0
 ok()  { printf '  ok   %s\n' "$1"; }
 bad() { printf '  FAIL %s\n' "$1"; fail=1; }
@@ -35,17 +36,25 @@ for f in $(find "$PUB" -name index.html); do
 done
 [ "$bad_canon" = "0" ] && ok "one canonical per page"
 
-echo "== hreflang x-default -> /en/ (home) =="
-if grep -q 'hreflang="x-default" href="https://dedupcommando.github.io/en/"' "$PUB/index.html"; then
-  ok "x-default -> /en/"; else bad "x-default not -> /en/"; fi
+echo "== home: the retro desktop at / (en, x-default) and /ru/ =="
+for p in index.html ru/index.html; do
+  if grep -q "hreflang=\"x-default\" href=\"$BASE/\"" "$PUB/$p"; then ok "/$p: x-default -> /"; else bad "/$p: x-default not -> /"; fi
+  if grep -q 'id="desktop"' "$PUB/$p"; then ok "/$p: retro desktop"; else bad "/$p: not the retro desktop"; fi
+  n=$(grep -c '<h1' "$PUB/$p"); [ "$n" = "1" ] && ok "/$p: one <h1>" || bad "/$p: <h1> x$n"
+done
+if grep -q 'http-equiv="refresh"' "$PUB/en/docs/index.html"; then ok "/en/docs/ redirects to /en/"; else bad "/en/docs/ is not a redirect"; fi
 
-echo "== sitemap excludes bare root / =="
-if grep -q '<loc>https://dedupcommando.github.io/</loc>' "$PUB/sitemap.xml"; then
-  bad "sitemap has bare root /"; else ok "no bare root in sitemap"; fi
+echo "== sitemap: home pages in, redirects out =="
+for u in "$BASE/" "$BASE/ru/" "$BASE/en/"; do
+  if grep -q "<loc>$u</loc>" "$PUB/sitemap.xml"; then ok "sitemap has $u"; else bad "sitemap misses $u"; fi
+done
+if grep -q "<loc>$BASE/en/docs/</loc>" "$PUB/sitemap.xml"; then bad "sitemap lists the /en/docs/ redirect"; else ok "no redirect stubs in sitemap"; fi
 
 echo "== no external scripts / CDNs / trackers =="
-if grep -rInE '<script[^>]+src=|googleapis|google-analytics|gtag\(|cdn\.|jsdelivr|unpkg|fonts\.(google|gstatic)' "$PUB" 2>/dev/null; then
-  bad "external resource or tracker found"; else ok "none"; fi
+ext=$(grep -rhoE '<script[^>]+src="[^"]*"' "$PUB" | sed -E 's/.*src="([^"]*)".*/\1/' | grep -vE "^($BASE/|/)" || true)
+if [ -n "$ext" ]; then bad "external script: $ext"; else ok "only own scripts"; fi
+if grep -rInE 'googleapis|google-analytics|gtag\(|cdn\.|jsdelivr|unpkg|fonts\.(google|gstatic)' "$PUB" 2>/dev/null; then
+  bad "external resource or tracker found"; else ok "no CDNs or trackers"; fi
 
 echo "== forbidden claims =="
 if grep -rInE 'TrueNAS|ZFS deduplication|Proxmox DedupCommando|production-ready|production-grade' content "$PUB" 2>/dev/null; then
