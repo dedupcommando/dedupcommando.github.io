@@ -27,4 +27,4 @@ Mark a keeper and an action per group — **delete to quarantine**, **hardlink**
 - **Linux only** (x86_64 / aarch64), kernel ≥ 3.15.
 - Scanning works on any filesystem, but the snapshot safety model needs **ZFS**, so applying actions outside ZFS is not recommended.
 
-**Beta (v0.9.0-beta.1).** [Documentation](@/en/_index.md) · [Safety & recovery](@/en/safety-and-recovery/_index.md) · [Source on GitHub](https://github.com/dedupcommando/DedupCommando)
+**Beta (v{{ version() }}).** [Documentation](@/en/_index.md) · [Safety & recovery](@/en/safety-and-recovery/_index.md) · [Source on GitHub](https://github.com/dedupcommando/DedupCommando)

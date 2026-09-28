@@ -8,7 +8,7 @@ dir = "ltr"
 h1 = "Tìm tệp và thư mục trùng lặp và thu hồi dung lượng — một cách an toàn"
 +++
 
-**Beta — v0.9.0-beta.1.** DedupCommando thực hiện các thao tác phá hủy (xóa, hardlink, reflink) trên các tệp thật. Hãy đọc hướng dẫn an toàn trước khi áp dụng bất cứ điều gì và luôn giữ bản sao lưu.
+**Beta — v{{ version() }}.** DedupCommando thực hiện các thao tác phá hủy (xóa, hardlink, reflink) trên các tệp thật. Hãy đọc hướng dẫn an toàn trước khi áp dụng bất cứ điều gì và luôn giữ bản sao lưu.
 
 DedupCommando là một công cụ dòng lệnh cho Linux (CLI và TUI) để tìm các **tệp và thư mục giống hệt nhau từng byte** và thu hồi dung lượng bị lãng phí — được thiết kế cho kho lưu trữ **ZFS**, bao gồm cả lưu trữ trên các hệ thống Proxmox VE. An toàn dữ liệu là trên hết: mỗi lô thao tác phá hủy chạy dưới một ảnh chụp (snapshot) ZFS, các tệp “đã xóa” được chuyển vào khu cách ly thay vì bị gỡ bỏ, và nội dung được xác thực lại ngay trước mỗi thao tác.
 

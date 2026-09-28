@@ -39,4 +39,4 @@ DedupCommando acts by path, so a theoretical check-to-act (TOCTOU) window exists
 - Reflink needs ZFS 2.3+ with `block_cloning`; hardlink is within a single dataset.
 - Grouping a very large scan can use significant memory; DedupCommando estimates it and warns first.
 
-**Beta (v0.9.0-beta.1). Keep backups.** [Documentation](@/en/_index.md) · [Source on GitHub](https://github.com/dedupcommando/DedupCommando)
+**Beta (v{{ version() }}). Keep backups.** [Documentation](@/en/_index.md) · [Source on GitHub](https://github.com/dedupcommando/DedupCommando)

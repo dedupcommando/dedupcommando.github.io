@@ -10,7 +10,7 @@ h1 = "DedupCommando documentation"
 short_title = "Docs"
 +++
 
-**Beta — v0.9.0-beta.1.** DedupCommando performs destructive operations (delete, hardlink, reflink) on real files. Read the [safety guide](@/en/safety-model.md) before applying anything, and keep backups.
+**Beta — v{{ version() }}.** DedupCommando performs destructive operations (delete, hardlink, reflink) on real files. Read the [safety guide](@/en/safety-model.md) before applying anything, and keep backups.
 
 DedupCommando is a Linux terminal tool (CLI and TUI) that finds **byte-for-byte identical files and whole duplicate folders**, and reclaims the space they waste — built for **ZFS** pools, including storage hosted on Proxmox VE systems. Data safety comes first: every destructive batch runs under a ZFS snapshot, "deleted" files are moved to a quarantine instead of being unlinked, and content is re-validated immediately before each action.
 

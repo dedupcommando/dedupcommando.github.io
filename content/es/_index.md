@@ -8,7 +8,7 @@ dir = "ltr"
 h1 = "Encuentra archivos y carpetas duplicados y recupera espacio, de forma segura"
 +++
 
-**Beta — v0.9.0-beta.1.** DedupCommando realiza operaciones destructivas (borrar, hardlink, reflink) sobre archivos reales. Lee la guía de seguridad antes de aplicar nada y mantén copias de seguridad.
+**Beta — v{{ version() }}.** DedupCommando realiza operaciones destructivas (borrar, hardlink, reflink) sobre archivos reales. Lee la guía de seguridad antes de aplicar nada y mantén copias de seguridad.
 
 DedupCommando es una herramienta de terminal para Linux (CLI y TUI) que encuentra **archivos y carpetas idénticos byte a byte** y recupera el espacio que desperdician — pensada para almacenamiento en **ZFS**, incluido el alojado en sistemas Proxmox VE. La seguridad de los datos es lo primero: cada lote destructivo se ejecuta bajo una instantánea (snapshot) de ZFS, los archivos «borrados» se mueven a una cuarentena en lugar de eliminarse, y el contenido se vuelve a validar justo antes de cada acción.
 

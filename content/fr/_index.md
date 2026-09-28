@@ -8,7 +8,7 @@ dir = "ltr"
 h1 = "Trouvez les fichiers et dossiers en double et récupérez de l'espace, en toute sécurité"
 +++
 
-**Bêta — v0.9.0-beta.1.** DedupCommando effectue des opérations destructrices (suppression, hardlink, reflink) sur de vrais fichiers. Lisez le guide de sécurité avant d'appliquer quoi que ce soit et conservez des sauvegardes.
+**Bêta — v{{ version() }}.** DedupCommando effectue des opérations destructrices (suppression, hardlink, reflink) sur de vrais fichiers. Lisez le guide de sécurité avant d'appliquer quoi que ce soit et conservez des sauvegardes.
 
 DedupCommando est un outil en terminal pour Linux (CLI et TUI) qui trouve les **fichiers et dossiers identiques octet par octet** et récupère l'espace qu'ils gaspillent — conçu pour le stockage **ZFS**, y compris celui hébergé sur des systèmes Proxmox VE. La sécurité des données passe avant tout : chaque lot destructif s'exécute sous un instantané (snapshot) ZFS, les fichiers « supprimés » sont déplacés vers une quarantaine au lieu d'être effacés, et le contenu est revalidé juste avant chaque action.
 

@@ -1,0 +1,2 @@
+{#- The latest released version, from data/release.json (written by scripts/sync_docs.py). Use as v{{ version() }}. -#}
+{%- set rel = load_data(path="data/release.json") -%}{{ rel.version }}

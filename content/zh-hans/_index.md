@@ -8,7 +8,7 @@ dir = "ltr"
 h1 = "安全地查找重复的文件和文件夹并回收存储空间"
 +++
 
-**Beta — v0.9.0-beta.1。** DedupCommando 会对真实文件执行破坏性操作（删除、hardlink、reflink）。在执行任何操作前，请阅读安全指南，并保留备份。
+**Beta — v{{ version() }}。** DedupCommando 会对真实文件执行破坏性操作（删除、hardlink、reflink）。在执行任何操作前，请阅读安全指南，并保留备份。
 
 DedupCommando 是一个用于 Linux 的终端工具（CLI 与 TUI），用于查找**逐字节完全相同的文件和文件夹**并回收它们浪费的空间——专为 **ZFS** 存储而设计，包括托管在 Proxmox VE 系统上的存储。数据安全优先：每一批破坏性操作都在 ZFS 快照（snapshot）下执行，“删除”的文件会被移入隔离区而非直接删除，并在每个操作前立即重新校验内容。
 
