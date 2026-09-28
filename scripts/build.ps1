@@ -57,9 +57,16 @@ if ($Serve) {
 
 Invoke-Zola @('build')
 
-$gitDir = Split-Path (Get-Command git).Source -Parent
-$sh = Join-Path $gitDir '..\bin\sh.exe'
-if (-not (Test-Path $sh)) { throw "sh.exe from Git for Windows not found next to $gitDir" }
+# git.exe may sit in Git\cmd, Git\bin or Git\mingw64\bin; sh.exe is in Git\bin.
+$dir = Split-Path (Get-Command git).Source -Parent
+$sh = $null
+for ($i = 0; $i -lt 4 -and $dir; $i++) {
+  $candidate = Join-Path $dir 'bin\sh.exe'
+  if (Test-Path $candidate) { $sh = $candidate; break }
+  if (Test-Path (Join-Path $dir 'sh.exe')) { $sh = Join-Path $dir 'sh.exe'; break }
+  $dir = Split-Path $dir -Parent
+}
+if (-not $sh) { throw 'sh.exe from Git for Windows not found near git.exe' }
 Push-Location $root
 try {
   & $sh ./check.sh --no-build
