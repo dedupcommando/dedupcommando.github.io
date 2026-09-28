@@ -25,7 +25,7 @@ echo "== routes =="
 for p in . ru en ar vi es zh-hans pt-br fr hi \
          en/zfs-file-deduplication en/proxmox-ve-duplicate-files \
          en/linux-duplicate-file-finder en/hardlink-vs-reflink en/safety-and-recovery \
-         en/faq en/safety-model en/verifying-releases en/changelog "en/changelog/v$VERSION" en/docs \
+         en/faq en/compare en/safety-model en/verifying-releases en/changelog "en/changelog/v$VERSION" en/docs \
          en/manual en/manual/intro en/manual/install en/manual/safety en/manual/quickstart \
          en/manual/commando en/manual/classic en/manual/scanning en/manual/actions \
          en/manual/triage-board en/manual/diff-trash en/manual/headless en/manual/maintenance \
