@@ -24,7 +24,7 @@ DedupCommando là một công cụ dòng lệnh cho Linux (CLI và TUI) để t�
 
 - **Xóa vào khu cách ly** — bỏ một bản trùng nhưng vẫn khôi phục được cho đến khi dọn sạch.
 - **Hardlink** — trỏ các bản trùng tới cùng một inode (trong cùng một dataset).
-- **Reflink** — nhân bản khối theo cơ chế sao-chép-khi-ghi (CoW) trên ZFS có `block_cloning` (cùng một pool); siêu dữ liệu độc lập, các khối được chia sẻ cho đến khi một tệp thay đổi.
+- **Reflink** — nhân bản khối theo cơ chế sao-chép-khi-ghi (CoW) trên ZFS có `block_cloning` (trong cùng một dataset); siêu dữ liệu độc lập, các khối được chia sẻ cho đến khi một tệp thay đổi.
 
 Trong mỗi nhóm, một tệp là bản **giữ lại** (keeper); phần còn lại trở thành liên kết hoặc vào khu cách ly.
 

@@ -24,7 +24,7 @@ DedupCommando est un outil en terminal pour Linux (CLI et TUI) qui trouve les **
 
 - **Supprimer vers la quarantaine** — retirez un doublon tout en le gardant récupérable jusqu'au vidage.
 - **Hardlink** — faites pointer les doublons vers un même inode (au sein d'un seul dataset).
-- **Reflink** — clone de blocs en copie sur écriture (CoW) sur ZFS avec `block_cloning` (même pool) ; métadonnées indépendantes, blocs partagés jusqu'à ce qu'un fichier change.
+- **Reflink** — clone de blocs en copie sur écriture (CoW) sur ZFS avec `block_cloning` (dans le même dataset) ; métadonnées indépendantes, blocs partagés jusqu'à ce qu'un fichier change.
 
 Dans chaque groupe, un fichier est celui **conservé** (keeper) ; les autres deviennent des liens ou partent en quarantaine.
 

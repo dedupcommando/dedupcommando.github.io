@@ -23,7 +23,7 @@ A hardlink makes two paths point at the **same inode**. There is only one copy o
 A reflink gives each path its **own inode** that initially **shares data blocks** with the other. Each file keeps independent metadata (owner, permissions); when one is modified, only the changed blocks diverge (copy-on-write).
 
 - Space is reclaimed immediately, while each file stays independent.
-- On ZFS, needs `block_cloning` (ZFS 2.3+); keeper and target may be in different datasets of the **same pool**.
+- On ZFS, needs `block_cloning` (ZFS 2.3+); keeper and target must be in the **same dataset**, as for a hardlink: each ZFS dataset is a separate filesystem.
 
 ## Which should you use?
 

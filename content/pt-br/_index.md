@@ -24,7 +24,7 @@ O DedupCommando é uma ferramenta de terminal para Linux (CLI e TUI) que encontr
 
 - **Excluir para a quarentena** — remova um duplicado mantendo-o recuperável até esvaziá-la.
 - **Hardlink** — aponte os duplicados para um mesmo inode (dentro de um único dataset).
-- **Reflink** — clone de blocos com cópia na escrita (CoW) no ZFS com `block_cloning` (mesmo pool); metadados independentes e blocos compartilhados até um arquivo mudar.
+- **Reflink** — clone de blocos com cópia na escrita (CoW) no ZFS com `block_cloning` (dentro do mesmo dataset); metadados independentes e blocos compartilhados até um arquivo mudar.
 
 Em cada grupo, um arquivo é o **mantido** (keeper); o restante vira link ou vai para a quarentena.
 

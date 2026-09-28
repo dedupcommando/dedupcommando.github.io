@@ -65,7 +65,7 @@ Pick scan roots, choose an intensity profile (Idle on a busy host), and start. A
 
 - **Delete to quarantine** — remove a duplicate, keep it recoverable until purged.
 - **Hardlink** — point duplicates at one shared inode (within a single dataset).
-- **Reflink** — copy-on-write block clone on ZFS with `block_cloning` (same pool); independent metadata, blocks shared until a file changes.
+- **Reflink** — copy-on-write block clone on ZFS with `block_cloning` (within one dataset, like a hardlink); independent metadata, blocks shared until a file changes.
 
 One file in each group is the **keeper**; the rest become links or go to quarantine.
 

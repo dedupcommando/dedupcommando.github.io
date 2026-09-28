@@ -19,7 +19,7 @@ This is **file-level** deduplication: it finds and removes duplicate *files*. It
 
 ## Reflink and hardlink on ZFS
 
-- **Reflink (copy-on-write block clone)** — on pools with `block_cloning` enabled (ZFS 2.3+), duplicates can share blocks while keeping independent metadata; a file's blocks diverge only when it changes. Keeper and target may live in different datasets of the **same pool**.
+- **Reflink (copy-on-write block clone)** — on pools with `block_cloning` enabled (ZFS 2.3+), duplicates can share blocks while keeping independent metadata; a file's blocks diverge only when it changes. Keeper and target must live in the **same dataset**, as for a hardlink: each ZFS dataset is a separate filesystem.
 - **Hardlink** — duplicates share a single inode within the **same dataset**.
 - **Delete to quarantine** — always available; removed files stay recoverable until you purge them.
 
