@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 {%- if page is defined %}{% set_global obj = page %}{% else %}{% set_global obj = section %}{% endif -%}
+{%- set rel = load_data(path="data/release.json") -%}
+{%- set crumbs = obj.extra.crumbs | default(value=[]) -%}
+{%- set schema = obj.extra.schema | default(value="") -%}
 {%- set cur = obj.extra.lang | default(value="en") -%}
 {%- set depth = obj.components | length -%}
 {%- if obj.extra.canonical -%}{%- set canonical = get_url(path=obj.extra.canonical) -%}{%- else -%}{%- set canonical = obj.permalink -%}{%- endif -%}
@@ -45,10 +48,28 @@
   <meta name="twitter:title" content="{{ obj.title | default(value=config.title) }}">
   <meta name="twitter:description" content="{{ obj.description | default(value=config.description) }}">
   <meta name="twitter:image" content="{{ get_url(path='assets/og/og-default.png') | safe }}">
+  {%- if page is defined and page.updated %}
+  <meta property="article:modified_time" content="{{ page.updated }}">
+  {%- endif %}
+  <link rel="alternate" type="application/atom+xml" title="DedupCommando release notes" href="{{ get_url(path='@/en/changelog/_index.md') | safe }}atom.xml">
+
+  {%- if not is_home %}
+  {%- set n = crumbs | length %}
+  <script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DedupCommando","item":{{ get_url(path=xdefault) | json_encode | safe }}}
+{%- for c in crumbs %},{"@type":"ListItem","position":{{ loop.index + 1 }},"name":{{ config.extra.crumbs[c].name | json_encode | safe }},"item":{{ get_url(path=config.extra.crumbs[c].path) | json_encode | safe }}}{% endfor -%}
+,{"@type":"ListItem","position":{{ n + 2 }},"name":{{ obj.extra.short_title | default(value=obj.title) | json_encode | safe }}}]}
+  </script>
+  {%- endif %}
+  {%- if schema == "TechArticle" %}
+  <script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TechArticle","headline":{{ obj.extra.short_title | default(value=obj.title) | json_encode | safe }},"description":{{ obj.description | default(value="") | json_encode | safe }},"url":{{ canonical | json_encode | safe }},"inLanguage":"en"{% if page is defined and page.date %},"datePublished":"{{ page.date }}"{% endif %}{% if page is defined and page.updated %},"dateModified":"{{ page.updated }}"{% endif %},"about":{"@type":"SoftwareApplication","name":"DedupCommando","softwareVersion":{{ rel.version | json_encode | safe }}},"author":{"@type":"Person","name":"Denis \"DeQuzzy\" Kuznetsov"},"publisher":{"@type":"Organization","name":"DedupCommando","url":"https://github.com/dedupcommando"}}
+  </script>
+  {%- endif %}
 
   {%- if is_home and cur == "en" %}
   <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"SoftwareApplication","name":"DedupCommando","applicationCategory":"UtilitiesApplication","operatingSystem":"Linux","softwareVersion":"{{ config.extra.version }}","url":"{{ get_url(path=xdefault) | safe }}","downloadUrl":"{{ config.extra.repo_url | safe }}/releases","releaseNotes":"{{ config.extra.repo_url | safe }}/releases","license":"https://www.apache.org/licenses/LICENSE-2.0","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Person","name":"Denis \"DeQuzzy\" Kuznetsov"},"publisher":{"@type":"Organization","name":"DedupCommando","url":"https://github.com/dedupcommando"}}
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"DedupCommando","applicationCategory":"UtilitiesApplication","operatingSystem":"Linux","softwareVersion":{{ rel.version | json_encode | safe }},"url":"{{ get_url(path=xdefault) | safe }}","downloadUrl":"{{ config.extra.repo_url | safe }}/releases","releaseNotes":"{{ get_url(path='@/en/changelog/_index.md') | safe }}","license":"https://www.apache.org/licenses/LICENSE-2.0","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Person","name":"Denis \"DeQuzzy\" Kuznetsov"},"publisher":{"@type":"Organization","name":"DedupCommando","url":"https://github.com/dedupcommando"}}
   </script>
   <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"SoftwareSourceCode","name":"DedupCommando","codeRepository":"{{ config.extra.repo_url | safe }}","programmingLanguage":"Rust","runtimePlatform":"Linux","license":"https://www.apache.org/licenses/LICENSE-2.0","author":{"@type":"Person","name":"Denis \"DeQuzzy\" Kuznetsov"}}
@@ -77,6 +98,10 @@
   {%- endif %}
 
   <main class="content" id="main">
+    {%- if crumbs %}
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="{{ get_url(path=xdefault) | safe }}">DedupCommando</a>
+      {%- for c in crumbs %} › <a href="{{ get_url(path=config.extra.crumbs[c].path) | safe }}">{{ config.extra.crumbs[c].name }}</a>{% endfor %}</nav>
+    {%- endif %}
     {% block content %}{% endblock content %}
     {%- if cur == "en" %}
     <aside class="cta" aria-label="Get DedupCommando">
@@ -88,7 +113,7 @@
   </main>
 
   <footer class="site-footer">
-    <p>DedupCommando — v{{ config.extra.version }} (beta) · Apache-2.0 ·
+    <p>DedupCommando — v{{ rel.version }} (beta) · Apache-2.0 ·
        <a href="{{ config.extra.repo_url | safe }}">Source on GitHub</a></p>
     <p class="trademarks">
       Proxmox® is a registered trademark of Proxmox Server Solutions GmbH. DedupCommando is an independent

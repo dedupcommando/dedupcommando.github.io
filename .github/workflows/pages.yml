@@ -21,6 +21,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0   # page dates in the sitemap come from git history
+      - name: Check out the code repository (manual and release notes)
+        uses: actions/checkout@v7
+        with:
+          repository: dedupcommando/DedupCommando
+          path: _upstream
+          fetch-depth: 0   # the sync reads tags and file history at the commit pinned in upstream.lock
+      - name: Sync the manual, docs and release notes
+        run: python3 scripts/sync_docs.py --repo _upstream
       - name: Install Zola
         run: |
           ver=0.19.2

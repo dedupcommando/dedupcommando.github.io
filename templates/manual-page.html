@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+{%- set manual = get_section(path="en/manual/_index.md") %}
+<div class="manual">
+  <nav class="manual-nav" aria-label="Manual chapters">
+    <p class="manual-nav-title"><a href="{{ manual.permalink | safe }}">DedupCommando manual</a></p>
+    <ol>
+    {%- for p in manual.pages %}
+      <li><a href="{{ p.permalink | safe }}"{% if p.permalink == page.permalink %} aria-current="page"{% endif %}>{{ p.extra.short_title }}</a></li>
+    {%- endfor %}
+    </ol>
+  </nav>
+  <article class="manual-body">
+    <h1>{{ page.extra.h1 }}</h1>
+    {%- if page.toc | length > 1 %}
+    <nav class="toc" aria-label="On this page">
+      <p class="toc-title">On this page</p>
+      <ol>
+      {%- for h in page.toc %}
+        <li><a href="{{ h.permalink | safe }}">{{ h.title }}</a></li>
+      {%- endfor %}
+      </ol>
+    </nav>
+    {%- endif %}
+    {{ page.content | safe }}
+    <nav class="pager" aria-label="Previous and next chapter">
+      {%- if page.lower %}<a rel="prev" href="{{ page.lower.permalink | safe }}">← {{ page.lower.extra.h1 }}</a>{% else %}<span></span>{% endif %}
+      {%- if page.higher %}<a rel="next" href="{{ page.higher.permalink | safe }}">{{ page.higher.extra.h1 }} →</a>{% endif %}
+    </nav>
+    <p class="source-note">Published from <a href="{{ page.extra.source_url | safe }}">{{ page.extra.source_path }}</a>
+      at {{ page.extra.source_ref }} · last changed {{ page.updated }}</p>
+  </article>
+</div>
+{% endblock content %}

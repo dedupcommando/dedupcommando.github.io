@@ -17,7 +17,7 @@ compile_sass = false
 highlight_code = false
 
 [extra]
-version = "0.9.0-beta.1"
+# The released version is not written here: scripts/sync_docs.py puts it in data/release.json.
 repo_url = "https://github.com/dedupcommando/DedupCommando"
 # Published locales. `home` is the content path of each locale's home page: the hreflang cluster, the
 # language switcher and x-default (the "en" home) are all built from it.
@@ -32,3 +32,10 @@ locales = [
   { slug = "fr",      home = "@/fr/_index.md",      hreflang = "fr",      name = "Français",           dir = "ltr", og_locale = "fr_FR" },
   { slug = "hi",      home = "@/hi/_index.md",      hreflang = "hi",      name = "हिन्दी",               dir = "ltr", og_locale = "hi_IN" },
 ]
+
+# Breadcrumb trail entries. Generated pages name them in `extra.crumbs` (e.g. ["docs", "manual"]);
+# the trail always starts at the English home.
+[extra.crumbs]
+docs = { name = "Docs", path = "@/en/docs/_index.md" }
+manual = { name = "Manual", path = "@/en/manual/_index.md" }
+changelog = { name = "Release notes", path = "@/en/changelog/_index.md" }

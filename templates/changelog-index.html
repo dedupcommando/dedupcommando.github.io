@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>{{ section.extra.h1 }}</h1>
+  {{ section.content | safe }}
+  <ul class="releases">
+  {%- for p in section.pages %}
+    <li>
+      <a href="{{ p.permalink | safe }}"><strong>{{ p.extra.tag }}</strong></a>
+      · <time datetime="{{ p.date }}">{{ p.date | date(format="%-d %B %Y") }}</time>
+      <p>{{ p.description }}</p>
+    </li>
+  {%- endfor %}
+  </ul>
+{% endblock content %}

@@ -104,3 +104,30 @@ h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); line-height: 1.2; }
   border-radius: .35rem;
 }
 .cta p { margin: 0; }
+
+/* Documentation pages: manual chapters, safety and verification docs, release notes. */
+.breadcrumbs, .source-note, .release-meta { color: var(--muted); font-size: .88rem; }
+.breadcrumbs { margin-block-end: .5rem; }
+.source-note { margin-block-start: 2rem; }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size: .92em; }
+:not(pre) > code { background: var(--rule); padding: .05rem .3rem; border-radius: .2rem; }
+pre { overflow-x: auto; padding: .8rem 1rem; border: 1px solid var(--rule); border-radius: .35rem; line-height: 1.45; }
+table { border-collapse: collapse; display: block; overflow-x: auto; margin-block: 1rem; font-size: .92rem; }
+th, td { border: 1px solid var(--rule); padding: .35rem .6rem; text-align: start; vertical-align: top; }
+blockquote { margin-inline: 0; padding-inline-start: 1rem; border-inline-start: 4px solid var(--rule); color: var(--muted); }
+h2, h3 { line-height: 1.25; margin-block-start: 2rem; }
+
+.manual { display: grid; gap: 2rem; }
+.manual-nav ol, .toc ol { padding-inline-start: 1.4rem; margin: .25rem 0; }
+.manual-nav a[aria-current="page"] { font-weight: 700; }
+.manual-nav-title, .toc-title { font-weight: 700; margin: 0; }
+.toc { border: 1px solid var(--rule); border-radius: .35rem; padding: .6rem 1rem; font-size: .92rem; }
+.pager { display: flex; justify-content: space-between; gap: 1rem; margin-block-start: 2.5rem; }
+.releases { list-style: none; padding: 0; }
+.releases li { padding-block: .6rem; border-block-end: 1px solid var(--rule); }
+.releases p { margin: .25rem 0 0; }
+@media (min-width: 64rem) {
+  :root { --maxw: 72rem; }
+  .manual { grid-template-columns: 15rem minmax(0, 1fr); }
+  .manual-nav { position: sticky; inset-block-start: 1rem; align-self: start; font-size: .9rem; }
+}

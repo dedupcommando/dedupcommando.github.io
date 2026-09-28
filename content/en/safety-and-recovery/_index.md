@@ -8,7 +8,7 @@ dir = "ltr"
 h1 = "Safety, recovery, and honest limitations"
 +++
 
-DedupCommando relinks and removes real files, so it is built around layered safeguards. This is a summary; the authoritative guide is [docs/SAFETY.md](https://github.com/dedupcommando/DedupCommando/blob/main/docs/SAFETY.md) in the repository.
+DedupCommando relinks and removes real files, so it is built around layered safeguards. This is a summary; the authoritative guide is [Safety, recovery and limitations](@/en/safety-model.md), and the full detail is in [chapter 3 of the manual](@/en/manual/03-safety.md).
 
 ## The safety model
 

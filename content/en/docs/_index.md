@@ -43,14 +43,14 @@ Pick scan roots, choose an intensity profile (Idle on a busy host), and start. A
 
 ## Read the docs
 
-- [README](https://github.com/dedupcommando/DedupCommando/blob/main/README.md) — overview and quickstart.
-- [Full manual](https://github.com/dedupcommando/DedupCommando/tree/main/docs/manual) — install, data safety, scanning, actions, the Commando and Classic interfaces, headless/cron, maintenance, troubleshooting, hotkeys.
-- [Safety, recovery & limitations](https://github.com/dedupcommando/DedupCommando/blob/main/docs/SAFETY.md).
-- [Verifying releases](https://github.com/dedupcommando/DedupCommando/blob/main/docs/VERIFYING-RELEASES.md).
-- [Contributing](https://github.com/dedupcommando/DedupCommando/blob/main/CONTRIBUTING.md) (DCO) · [Security policy](https://github.com/dedupcommando/DedupCommando/blob/main/SECURITY.md) · [Trademarks](https://github.com/dedupcommando/DedupCommando/blob/main/TRADEMARKS.md).
+- [User manual](@/en/manual/_index.md) — install, data safety, scanning, actions, the Commando and Classic interfaces, headless/cron, maintenance, troubleshooting, hotkeys.
+- [Safety, recovery and limitations](@/en/safety-model.md).
+- [Verifying releases](@/en/verifying-releases.md).
+- [Release notes](@/en/changelog/_index.md) — what changed in each version.
+- On GitHub: [README](https://github.com/dedupcommando/DedupCommando/blob/main/README.md) · [Contributing](https://github.com/dedupcommando/DedupCommando/blob/main/CONTRIBUTING.md) (DCO) · [Security policy](https://github.com/dedupcommando/DedupCommando/blob/main/SECURITY.md) · [Trademarks](https://github.com/dedupcommando/DedupCommando/blob/main/TRADEMARKS.md).
 
 ## Verify your download
 
-Each release ships SHA-256 checksums, a CycloneDX SBOM, and a SLSA build-provenance attestation; minisign signatures are added once the project publishes its public key. See [Verifying releases](https://github.com/dedupcommando/DedupCommando/blob/main/docs/VERIFYING-RELEASES.md).
+Each release ships SHA-256 checksums, minisign signatures, a CycloneDX SBOM and a SLSA build-provenance attestation. See [Verifying releases](@/en/verifying-releases.md).
 
 **Beta (v0.9.0-beta.1).**
