@@ -97,4 +97,5 @@ Each release ships SHA-256 checksums, minisign signatures, a CycloneDX SBOM and 
 - [Duplicate files on Proxmox VE storage](@/en/proxmox-ve-duplicate-files/_index.md)
 - [The Linux duplicate file finder](@/en/linux-duplicate-file-finder/_index.md)
 - [Hardlink vs reflink](@/en/hardlink-vs-reflink/_index.md)
-- [Safety and recovery in brief](@/en/safety-and-recovery/_index.md)
+- [Safe duplicate deletion and recovery](@/en/safety-and-recovery/_index.md)
+- [Frequently asked questions](@/en/faq/_index.md)
