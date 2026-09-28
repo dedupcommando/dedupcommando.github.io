@@ -5,8 +5,9 @@
 .DESCRIPTION
   1. scripts/sync_docs.py writes the manual, docs and release notes from a checkout of
      dedupcommando/DedupCommando at the commit pinned in upstream.lock.
-  2. Zola 0.19.2 builds public/ (from the official Docker image unless -Native is given).
-  3. check.sh verifies the result with Git for Windows' sh.
+  2. scripts/lastmod.py dates every section for the sitemap.
+  3. Zola 0.19.2 builds public/ (from the official Docker image unless -Native is given).
+  4. check.sh verifies the result with Git for Windows' sh.
 
 .EXAMPLE
   pwsh scripts/build.ps1 -Repo ../DedupCommando
@@ -34,6 +35,8 @@ if (-not $NoSync) {
   python "$root/scripts/sync_docs.py" --repo $Repo --out $root
   if ($LASTEXITCODE) { throw 'sync_docs.py failed' }
 }
+python "$root/scripts/lastmod.py" --root $root
+if ($LASTEXITCODE) { throw 'lastmod.py failed' }
 
 function Invoke-Zola([string[]]$ZolaArgs, [int[]]$Publish = @()) {
   if ($Native) {

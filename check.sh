@@ -1,12 +1,14 @@
 #!/usr/bin/env sh
-# Local gate for the DedupCommando landing site. Run from the landing/ directory.
+# Gate for the DedupCommando site. Run from the repository root after scripts/sync_docs.py and
+# scripts/lastmod.py (CI does this; locally use scripts/build.ps1).
 #   sh check.sh             build with Zola, then verify the output
 #   sh check.sh --no-build  verify an existing public/ only (skip the build)
-# Requires zola (for the build step) plus POSIX sh and grep. Non-zero exit on failure.
+# Requires zola (for the build step), POSIX sh and grep; python3 (or python) for the JSON-LD check.
 set -u
 
 PUB="public"
 BASE=$(sed -n 's/^base_url *= *"\([^"]*\)".*/\1/p' config.toml)
+OLD_HOST="dedupcommando.github.io"
 fail=0
 ok()  { printf '  ok   %s\n' "$1"; }
 bad() { printf '  FAIL %s\n' "$1"; fail=1; }
@@ -16,39 +18,108 @@ if [ "${1:-}" != "--no-build" ]; then
   zola build || { echo "build failed"; exit 2; }
 fi
 [ -d "$PUB" ] || { echo "no $PUB/ (build first)"; exit 2; }
+[ -f data/release.json ] || { echo "no data/release.json (run scripts/sync_docs.py first)"; exit 2; }
+VERSION=$(sed -n 's/.*"version": *"\([^"]*\)".*/\1/p' data/release.json)
 
 echo "== routes =="
-for p in . en ar vi es zh-hans pt-br ru fr hi \
+for p in . ru en ar vi es zh-hans pt-br fr hi \
          en/zfs-file-deduplication en/proxmox-ve-duplicate-files \
-         en/linux-duplicate-file-finder en/hardlink-vs-reflink \
-         en/safety-and-recovery en/docs; do
+         en/linux-duplicate-file-finder en/hardlink-vs-reflink en/safety-and-recovery \
+         en/safety-model en/verifying-releases en/changelog "en/changelog/v$VERSION" en/docs \
+         en/manual en/manual/intro en/manual/install en/manual/safety en/manual/quickstart \
+         en/manual/commando en/manual/classic en/manual/scanning en/manual/actions \
+         en/manual/triage-board en/manual/diff-trash en/manual/headless en/manual/maintenance \
+         en/manual/troubleshooting en/manual/hotkeys; do
   if [ -f "$PUB/$p/index.html" ]; then ok "/$p/"; else bad "/$p/ missing"; fi
 done
-for u in sitemap.xml robots.txt; do
+for u in sitemap.xml robots.txt 404.html en/changelog/atom.xml assets/retro.css assets/retro.js assets/app.js; do
   if [ -f "$PUB/$u" ]; then ok "$u"; else bad "$u missing"; fi
 done
 
-echo "== canonical: exactly one per page =="
+echo "== canonical: exactly one per page, on $BASE =="
 bad_canon=0
 for f in $(find "$PUB" -name index.html); do
   n=$(grep -c 'rel="canonical"' "$f" 2>/dev/null || echo 0)
   [ "$n" = "1" ] || { bad "canonical x$n: $f"; bad_canon=1; }
 done
 [ "$bad_canon" = "0" ] && ok "one canonical per page"
+foreign=$(grep -rhoE '<link rel="canonical" href="[^"]*"' "$PUB" | grep -v "href=\"$BASE/" || true)
+if [ -n "$foreign" ]; then bad "canonical on another host: $foreign"; else ok "every canonical on $BASE"; fi
 
 echo "== home: the retro desktop at / (en, x-default) and /ru/ =="
 for p in index.html ru/index.html; do
   if grep -q "hreflang=\"x-default\" href=\"$BASE/\"" "$PUB/$p"; then ok "/$p: x-default -> /"; else bad "/$p: x-default not -> /"; fi
   if grep -q 'id="desktop"' "$PUB/$p"; then ok "/$p: retro desktop"; else bad "/$p: not the retro desktop"; fi
   n=$(grep -c '<h1' "$PUB/$p"); [ "$n" = "1" ] && ok "/$p: one <h1>" || bad "/$p: <h1> x$n"
+  n=$(grep -c '<h2' "$PUB/$p"); [ "$n" -ge 6 ] && ok "/$p: $n <h2>" || bad "/$p: only $n <h2>"
 done
+if grep -q "\"softwareVersion\":\"$VERSION\"" "$PUB/index.html"; then ok "/: softwareVersion $VERSION"; else bad "/: softwareVersion is not $VERSION"; fi
 if grep -q 'http-equiv="refresh"' "$PUB/en/docs/index.html"; then ok "/en/docs/ redirects to /en/"; else bad "/en/docs/ is not a redirect"; fi
 
-echo "== sitemap: home pages in, redirects out =="
-for u in "$BASE/" "$BASE/ru/" "$BASE/en/"; do
+echo "== hreflang: every home page carries the same cluster =="
+cluster() { grep -oE '<link rel="alternate" hreflang="[^"]+" href="[^"]+">' "$1" | sort; }
+ref=$(cluster "$PUB/index.html")
+n=$(printf '%s\n' "$ref" | grep -c hreflang)
+[ "$n" = "10" ] && ok "/: 9 languages + x-default" || bad "/: $n hreflang links"
+for p in ru ar vi es zh-hans pt-br fr hi; do
+  if [ "$(cluster "$PUB/$p/index.html")" = "$ref" ]; then ok "/$p/ same cluster"; else bad "/$p/ cluster differs"; fi
+done
+if grep -q "hreflang=\"en\" href=\"$BASE/en/manual/safety/\"" "$PUB/en/manual/safety/index.html"; then
+  ok "manual chapter references itself"; else bad "manual chapter hreflang"; fi
+
+echo "== sitemap and robots =="
+for u in "$BASE/" "$BASE/ru/" "$BASE/en/" "$BASE/en/manual/safety/" "$BASE/en/changelog/v$VERSION/"; do
   if grep -q "<loc>$u</loc>" "$PUB/sitemap.xml"; then ok "sitemap has $u"; else bad "sitemap misses $u"; fi
 done
 if grep -q "<loc>$BASE/en/docs/</loc>" "$PUB/sitemap.xml"; then bad "sitemap lists the /en/docs/ redirect"; else ok "no redirect stubs in sitemap"; fi
+nloc=$(grep -c '<loc>' "$PUB/sitemap.xml"); nmod=$(grep -cE '<lastmod>[0-9]{4}-[0-9]{2}-[0-9]{2}</lastmod>' "$PUB/sitemap.xml")
+[ "$nloc" = "$nmod" ] && ok "lastmod on all $nloc URLs" || bad "lastmod on $nmod of $nloc URLs"
+if grep -q "^Sitemap: $BASE/sitemap.xml" "$PUB/robots.txt"; then ok "robots.txt points to the sitemap"; else bad "robots.txt sitemap line"; fi
+
+echo "== manual and release notes =="
+if grep -q "rel=\"prev\" href=\"$BASE/en/manual/install/\"" "$PUB/en/manual/safety/index.html" &&
+   grep -q "rel=\"next\" href=\"$BASE/en/manual/quickstart/\"" "$PUB/en/manual/safety/index.html"; then
+  ok "chapter 3: previous = install, next = quickstart"; else bad "manual prev/next order"; fi
+nobc=$(for f in "$PUB"/en/manual/*/index.html; do grep -q '"BreadcrumbList"' "$f" || echo "$f"; done)
+[ -z "$nobc" ] && ok "breadcrumbs on every chapter" || bad "no breadcrumbs: $nobc"
+missing=$(for f in $(find "$PUB/en" -name index.html); do
+  grep -oE "href=\"$BASE/en/[a-z0-9./-]+/#[^\"]+\"" "$f" | sed -E "s|href=\"$BASE/||; s|\"\$||" | while read -r a; do
+    p=${a%%#*}; id=${a#*#}
+    grep -q "id=\"$id\"" "$PUB/${p}index.html" || echo "$a"
+  done
+done | sort -u)
+[ -z "$missing" ] && ok "every #anchor link resolves" || bad "anchors missing: $missing"
+entries=$(grep -c '<entry' "$PUB/en/changelog/atom.xml" 2>/dev/null || echo 0)
+[ "$entries" -ge 1 ] && ok "atom feed: $entries entries" || bad "atom feed empty"
+
+echo "== structured data =="
+PY=""
+for c in python3 python; do  # on Windows "python3" may be a Store stub that does not run
+  if command -v "$c" >/dev/null 2>&1 && "$c" -c 'import json' >/dev/null 2>&1; then PY=$c; break; fi
+done
+if [ -z "$PY" ]; then bad "python3 not found for the JSON-LD check"; else
+  if "$PY" - "$PUB" <<'EOF'
+import json, pathlib, re, sys
+bad = n = 0
+for f in pathlib.Path(sys.argv[1]).rglob("*.html"):
+    for block in re.findall(r'<script type="application/ld\+json">(.*?)</script>', f.read_text(encoding="utf-8"), re.S):
+        n += 1
+        try:
+            json.loads(block)
+        except ValueError as e:
+            bad += 1
+            print(f"  invalid JSON-LD in {f}: {e}")
+print(f"  {n} JSON-LD blocks checked")
+sys.exit(1 if bad or not n else 0)
+EOF
+  then ok "all JSON-LD parses"; else bad "invalid JSON-LD"; fi
+fi
+
+echo "== old host only for the APT repository =="
+if [ "$BASE" = "https://$OLD_HOST" ]; then ok "site still served from $OLD_HOST (skipped)"; else
+  left=$(grep -rhoE "$OLD_HOST[^\" <)]*" "$PUB" | grep -v "^$OLD_HOST/apt" | sort -u)
+  [ -z "$left" ] && ok "no links to $OLD_HOST outside /apt" || bad "links to the old host: $left"
+fi
 
 echo "== no external scripts / CDNs / trackers =="
 ext=$(grep -rhoE '<script[^>]+src="[^"]*"' "$PUB" | sed -E 's/.*src="([^"]*)".*/\1/' | grep -vE "^($BASE/|/)" || true)
@@ -57,7 +128,7 @@ if grep -rInE 'googleapis|google-analytics|gtag\(|cdn\.|jsdelivr|unpkg|fonts\.(g
   bad "external resource or tracker found"; else ok "no CDNs or trackers"; fi
 
 echo "== forbidden claims =="
-if grep -rInE 'TrueNAS|ZFS deduplication|Proxmox DedupCommando|production-ready|production-grade' content "$PUB" 2>/dev/null; then
+if grep -rInE 'TrueNAS|ZFS deduplication|Proxmox DedupCommando|production-ready|production-grade' content templates "$PUB" 2>/dev/null; then
   bad "forbidden claim found"; else ok "none"; fi
 
 echo "== arabic RTL =="
