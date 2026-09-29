@@ -39,7 +39,13 @@
   <meta property="og:title" content="{{ obj.title | default(value=config.title) }}">
   <meta property="og:description" content="{{ obj.description | default(value=config.description) }}">
   <meta property="og:url" content="{{ canonical | safe }}">
-  <meta property="og:image" content="{{ get_url(path='assets/og/og-default.png') | safe }}">
+  {%- set og_image = get_url(path='assets/og/og-default.png', cachebust=true) %}
+  {%- set og_alt = "DedupCommando: dedup the files you already have, no dedup table. Three identical copies of debian-13.iso are linked by reflink to one set of blocks stored once, after a ZFS snapshot." %}
+  <meta property="og:image" content="{{ og_image | safe }}">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="{{ og_alt }}">
   <meta property="og:locale" content="{{ og_locale }}">
   {%- if is_home %}{%- for loc in config.extra.locales %}{%- if loc.hreflang != cur %}
   <meta property="og:locale:alternate" content="{{ loc.og_locale }}">
@@ -47,7 +53,8 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{{ obj.title | default(value=config.title) }}">
   <meta name="twitter:description" content="{{ obj.description | default(value=config.description) }}">
-  <meta name="twitter:image" content="{{ get_url(path='assets/og/og-default.png') | safe }}">
+  <meta name="twitter:image" content="{{ og_image | safe }}">
+  <meta name="twitter:image:alt" content="{{ og_alt }}">
   {%- if page is defined and page.updated %}
   <meta property="article:modified_time" content="{{ page.updated }}">
   {%- endif %}
