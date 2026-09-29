@@ -49,10 +49,12 @@
     if (!w.classList.contains('show')) {
       w.classList.add('show');
       if (SMALL() && !w.classList.contains('dialog')) w.classList.add('max');
+      delete w.dataset.moved;
       clampWin(w);
       addTask(id, w);
     }
     w.hidden = false;
+    keepCentered(w);
     focusWin(id);
   }
 
@@ -77,6 +79,7 @@
     const w = winOf(id);
     if (!w) return;
     w.classList.toggle('max');
+    keepCentered(w);
     focusWin(id);
   }
 
@@ -90,6 +93,17 @@
     if (!Number.isNaN(x)) w.style.left = Math.max(2, Math.min(x, maxX)) + 'px';
     if (!Number.isNaN(y)) w.style.top = Math.max(2, Math.min(y, maxY)) + 'px';
   }
+
+  /* data-center: окно встаёт по центру стола (над панелью задач) и держит центр,
+     когда меняется размер вкладки, пока его не утащили за тайтл-бар */
+  function keepCentered(w) {
+    if (!('center' in w.dataset) || 'moved' in w.dataset || w.hidden ||
+        !w.classList.contains('show') || w.classList.contains('max')) return;
+    /* offset*, а не getBoundingClientRect: анимация открытия уменьшает окно через scale */
+    w.style.left = Math.max(2, Math.round((desktop.clientWidth - w.offsetWidth) / 2)) + 'px';
+    w.style.top = Math.max(2, Math.round((desktop.clientHeight - w.offsetHeight) / 2)) + 'px';
+  }
+  new ResizeObserver(() => $$('.win[data-center]').forEach(keepCentered)).observe(desktop);
 
   function addTask(id, w) {
     if (tasks.has(id)) return;
@@ -118,6 +132,7 @@
       const r = w.getBoundingClientRect();
       const dx = e.clientX - r.left, dy = e.clientY - r.top;
       const move = (ev) => {
+        w.dataset.moved = '';
         w.style.left = Math.min(Math.max(ev.clientX - dx, 44 - r.width), innerWidth - 44) + 'px';
         w.style.top = Math.min(Math.max(ev.clientY - dy, 0), innerHeight - 90) + 'px';
       };
