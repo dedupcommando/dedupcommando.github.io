@@ -57,7 +57,7 @@ Press `G` in the scan configuration to cycle Turbo → Balanced → Idle. The pr
 
 ## What to leave out of a scan
 
-Leave other programs' stores out of the scan roots: a Proxmox Backup Server datastore, a virtual machine's disk, a restic, borg or kopia repository. Such a store needs every file at its own path with its own content. A delete inside it breaks it at once, and a hardlink makes two copies one file, so a program that later writes in place, as VM disks and databases do, changes both. A scan root takes in every dataset mounted below it and there is no way to exclude a path, so the roots are the only fence. The manual covers this in [section 8.9](https://github.com/dedupcommando/DedupCommando/blob/main/docs/manual/08-actions.md#89-backups-and-other-programs-stores), added after v0.9.1.
+Leave other programs' stores out of the scan roots: a Proxmox Backup Server datastore, a virtual machine's disk, a restic, borg or kopia repository. Such a store needs every file at its own path with its own content. A delete inside it breaks it at once, and a hardlink makes two copies one file, so a program that later writes in place, as VM disks and databases do, changes both. A scan root takes in every dataset mounted below it and there is no way to exclude a path, so the roots are the only fence. The manual covers this in [section 8.9](@/en/manual/08-actions.md#89-backups-and-other-programs-stores).
 
 What else the manual says points the same way:
 

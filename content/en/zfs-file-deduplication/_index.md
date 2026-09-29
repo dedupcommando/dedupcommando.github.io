@@ -58,7 +58,7 @@ No action frees space at once: the originals wait in the quarantine, and the bat
 
 - Linux on x86_64 or aarch64, kernel 3.15 or newer. The pre-built packages need glibc 2.39 or newer (Debian 13, Ubuntu 24.04, Proxmox VE 9).
 - ZFS, with `zfs` in `PATH`. dedcom is typically run as root, to take snapshots and scan outside your home directory.
-- For reflink: OpenZFS 2.3 or newer, with the pool feature the manual lists as `zpool feature@block_cloning=active`. Check it with `zpool get all <pool> | grep block_cloning`; the scan configuration screen also shows the pools where it is active. Without it, delete and hardlink still work ([troubleshooting](@/en/manual/13-troubleshooting.md#reflink-is-unavailable-on-this-host--needs-zfs-23-with-block-cloning-enabled)).
+- For reflink: on the host, OpenZFS 2.2.1 or newer with the module parameter `zfs_bclone_enabled` set to 1; on the pool, `feature@block_cloning` enabled or active (`zpool get feature@block_cloning <pool>`). The scan configuration header shows `block cloning: supported=… enabled=…` and whether reflink is available. Without them, delete and hardlink still work, and a plan with a reflink is refused before its confirmation opens (troubleshooting: [the host](@/en/manual/13-troubleshooting.md#cannot-reflink-on-this-host-n-marks--needs-openzfs-221-or-newer-with-zfs_bclone_enabled1-mark-hardlink-or-delete-or-unmark-first-), [the pool](@/en/manual/13-troubleshooting.md#cannot-reflink-on-pool-pool-n-marks--its-block_cloning-feature-is-disabled-mark-hardlink-or-delete-or-unmark-first-)).
 
 On other filesystems a scan runs, but without snapshots applying actions is not recommended.
 

@@ -76,7 +76,7 @@ After a hardlink, the target's own owner, permissions, ACLs and xattrs survive o
 - **Disk errors.** Check `zpool status` and run a scrub; on a damaged pool, none of the tool's protections hold.
 - **Concurrent ZFS operations.** Do not run an apply at the same time as a `zfs send` of the same dataset.
 - **A second operator.** Two writers on one state directory can corrupt the database.
-- **Other programs' stores.** Backup repositories, Proxmox Backup Server datastores and virtual machine disks need every file unchanged at its own path. A delete or hardlink inside one can break it, so keep such stores outside the scan roots ([section 8.9 of the manual](https://github.com/dedupcommando/DedupCommando/blob/main/docs/manual/08-actions.md#89-backups-and-other-programs-stores), added after v0.9.1).
+- **Other programs' stores.** Backup repositories, Proxmox Backup Server datastores and virtual machine disks need every file unchanged at its own path. A delete or hardlink inside one can break it, so keep such stores outside the scan roots ([section 8.9 of the manual](@/en/manual/08-actions.md#89-backups-and-other-programs-stores)).
 - **Your own scripts.** Deduplicating by hand from an `--export-csv` list loses revalidation and snapshot insurance.
 
 Other limits: DedupCommando is Linux-only (x86_64 or aarch64, kernel 3.15 or newer), there is no headless apply, and it typically runs as root. Hardlink and reflink both work within a single dataset, and reflink also needs ZFS 2.3 or newer with `block_cloning`. See [the limitations](@/en/safety-model.md#limitations) and [what the guardrails do not cover](@/en/manual/03-safety.md#what-the-guardrails-do-not-cover).

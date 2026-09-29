@@ -31,7 +31,7 @@ A reflink is a copy that shares storage. The new file has its own inode, and so 
 
 ## ZFS reflink: block cloning
 
-On ZFS, reflinks come from the `block_cloning` pool feature, which lets several files reference one block. DedupCommando needs ZFS 2.3 or newer with `block_cloning` enabled, and checks at startup whether cloning is safe to use on each pool. If a pool does not qualify, a reflink is cancelled with `reflink is unavailable on this host — needs ZFS 2.3+ with block cloning enabled`. The scan configuration header lists the pools where cloning is active.
+On ZFS, reflinks come from the `block_cloning` pool feature, which lets several files reference one block. DedupCommando needs OpenZFS 2.2.1 or newer with the module parameter `zfs_bclone_enabled` set to 1, and the pool's `feature@block_cloning` enabled or active; it reads both once, at startup. A plan with a reflink that the host or the pool cannot make is refused before its confirmation opens, with `cannot reflink on this host …` or `cannot reflink on pool <pool> …`, and the marks stay. The scan configuration header shows `block cloning: supported=… enabled=…`.
 
 **A reflink, like a hardlink, stays inside one dataset.** OpenZFS can clone blocks between datasets through `copy_file_range(2)` under some conditions, but DedupCommando clones with the `FICLONE` ioctl, which Linux accepts only within one mounted filesystem. Each ZFS dataset is a filesystem of its own, so the keeper and the duplicate must share a dataset for either action; otherwise the clone fails and the target stays as it was. The difference between the two actions is a shared inode versus shared blocks, not where they work.
 
@@ -62,7 +62,7 @@ The file moves to the quarantine on its dataset, and nothing is left at the path
 | | Hardlink | Reflink | Delete to quarantine |
 |---|---|---|---|
 | What is left at the path | A second name for the keeper's inode | A separate file sharing the keeper's blocks | Nothing |
-| Where it works | Same dataset as the keeper | Same dataset as the keeper, on ZFS 2.3+ with `block_cloning` | Any ZFS dataset |
+| Where it works | Same dataset as the keeper | Same dataset as the keeper, on OpenZFS 2.2.1+ with block cloning on for the host and the pool | Any ZFS dataset |
 | Metadata at the path | The keeper's owner, mode, ACL, xattrs and timestamps | The replaced file's owner, mode, ACL, xattrs, atime and mtime | None; the file in quarantine keeps its own |
 | A later write through one path | Changes the file at every path | Changes only that file | — |
 
