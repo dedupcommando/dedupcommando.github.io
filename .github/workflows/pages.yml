@@ -1,6 +1,7 @@
-# Build the landing site with Zola and deploy to GitHub Pages.
-# Lives in the public landing repo (dedupcommando.github.io); not used by the code repo.
-name: Deploy landing (GitHub Pages)
+# The DedupCommando site moved to https://dedcom.dequzzy.io/ (source: dedupcommando/site).
+# This repo keeps the old address https://dedupcommando.github.io/ working: every page here only
+# forwards to the new one. The APT repository under /apt/ is the separate repo dedupcommando/apt.
+name: Deploy redirects (GitHub Pages)
 
 on:
   push:
@@ -21,38 +22,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-        with:
-          fetch-depth: 0   # page dates in the sitemap come from git history
-      - name: Check out the code repository (manual and release notes)
-        uses: actions/checkout@v7
-        with:
-          repository: dedupcommando/DedupCommando
-          path: _upstream
-          fetch-depth: 0   # the sync reads tags and file history at the commit pinned in upstream.lock
-      - name: Sync the manual, docs and release notes
-        run: python3 scripts/sync_docs.py --repo _upstream
-      - name: Date the sections for the sitemap
-        run: python3 scripts/lastmod.py
-      - name: Install Zola
-        run: |
-          ver=0.19.2
-          url="https://github.com/getzola/zola/releases/download/v${ver}/zola-v${ver}-x86_64-unknown-linux-gnu.tar.gz"
-          curl -fsSL "$url" | tar xz
-          sudo install -m 0755 zola /usr/local/bin/zola
-      - name: Build
-        run: zola build
-      - name: Landing checks
-        run: sh check.sh --no-build
       - uses: actions/upload-pages-artifact@v5
         with:
-          path: public
+          path: redirect
 
   deploy:
     needs: build
-    # On a PRIVATE repo only `build` runs (it verifies the site compiles + uploads the
-    # artifact). The live deploy runs only when the repo is PUBLIC — i.e. after the public
-    # flip (Ф17). On a private repo (16B) this job is skipped, not failed.
-    if: ${{ github.event.repository.visibility == 'public' }}
     runs-on: ubuntu-latest
     environment:
       name: github-pages

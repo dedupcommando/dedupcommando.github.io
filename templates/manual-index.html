@@ -1,7 +1,0 @@
-{% extends "base.html" %}
-{% block content %}
-  <h1>{{ section.extra.h1 }}</h1>
-  {{ section.content | safe }}
-  <p class="source-note">Published from <a href="{{ section.extra.source_url | safe }}">{{ section.extra.source_path }}</a>
-    at {{ section.extra.source_ref }}. The manual describes that release.</p>
-{% endblock content %}

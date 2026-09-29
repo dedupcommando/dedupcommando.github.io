@@ -1,9 +1,0 @@
-{% extends "base.html" %}
-{% block content %}
-  <article>
-    <h1>{{ page.extra.h1 }}</h1>
-    {{ page.content | safe }}
-    <p class="source-note">Published from <a href="{{ page.extra.source_url | safe }}">{{ page.extra.source_path }}</a>
-      at {{ page.extra.source_ref }} · last changed {{ page.updated }}</p>
-  </article>
-{% endblock content %}
