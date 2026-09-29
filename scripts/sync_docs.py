@@ -54,6 +54,19 @@ DESCRIPTION_OVERRIDES: dict[str, str] = {
         "dedcom.log and benchmarks.log.",
 }
 
+# Headings of a released manual with a raw <placeholder>, which GitHub and the site would both swallow as HTML.
+# The source is fixed in the next release; until then the site escapes exactly these lines at exactly this tag.
+# A listed line that is no longer found fails the sync, so the list cannot go stale unnoticed.
+RAW_TAG_ESCAPES: dict[str, dict[str, tuple[str, ...]]] = {
+    "v0.9.2": {
+        "docs/manual/13-troubleshooting.md": (
+            '### "the group <hash> has files marked for an action and no keeper — choose the file to keep"',
+            '### "cannot reflink on pool <pool> (N marks) — its block_cloning feature is disabled; '
+            'mark HARDLINK or DELETE, or unmark; first: …"',
+        ),
+    },
+}
+
 SITE_DOCS = {
     "docs/SAFETY.md": ("@/en/safety-model.md", "safety-model", 10,
                        "Safety, recovery and limitations — DedupCommando", "Safety, recovery and limitations"),
@@ -250,6 +263,8 @@ def split_h1(text: str, src: str) -> tuple[str, list[str]]:
 def transform(body: list[str], doc: Doc, docs: dict[str, Doc], up: Upstream, problems: list[str]) -> str:
     out: list[str] = []
     seen: dict[str, int] = {}
+    escapes = set(RAW_TAG_ESCAPES.get(up.tag or "", {}).get(doc.src, ()))
+    escaped: set[str] = set()
 
     def rewrite(m: re.Match) -> str:
         bang, label, target = m.groups()
@@ -290,10 +305,16 @@ def transform(body: list[str], doc: Doc, docs: dict[str, Doc], up: Upstream, pro
             if len(level) == 1:
                 problems.append(f"{doc.src}: a second H1 heading: {text}")
             anchor = gh_anchor(text, seen)
-            out.append(f"{level} {LINK_RE.sub(rewrite, text)} {{#{anchor}}}")
+            shown = LINK_RE.sub(rewrite, text)
+            if line in escapes:  # see RAW_TAG_ESCAPES; the anchor still comes from the source text
+                shown = shown.replace("<", "&lt;").replace(">", "&gt;")
+                escaped.add(line)
+            out.append(f"{level} {shown} {{#{anchor}}}")
             continue
         out.append(LINK_RE.sub(rewrite, line))
-    for tag, where in raw_tags(body):
+    for line in sorted(escapes - escaped):
+        problems.append(f"{doc.src}: RAW_TAG_ESCAPES line not found at {up.tag}: {line[:80]}")
+    for tag, where in raw_tags(["" if line in escaped else line for line in body]):
         problems.append(f"{doc.src}: raw <{tag}> outside code would be swallowed as HTML: {where}")
     return "\n".join(out).strip("\n") + "\n"
 
